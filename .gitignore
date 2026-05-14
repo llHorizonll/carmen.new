@@ -1,0 +1,6 @@
+logs/
+repo-clone/
+frontend/dist/
+frontend/node_modules/
+backend/node_modules/
+**/.DS_Store
