@@ -1,19 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
 
 :root {
   font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-  color: #e5e7eb;
+  font-weight: 500;
+  color: #eef2f7;
   background:
-    radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 24%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 22%),
-    linear-gradient(180deg, #0f131a 0%, #0b0f14 100%);
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.05), transparent 20%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.03), transparent 18%),
+    linear-gradient(180deg, #0b1220 0%, #090c10 100%);
   color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --mantine-color-dimmed: #aeb8c6;
 }
 
 *,
@@ -24,7 +25,7 @@
 
 html {
   scroll-behavior: smooth;
-  background: #0b0f14;
+  background: #0b1220;
 }
 
 body {
@@ -32,9 +33,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 24%),
-    radial-gradient(circle at 72% 8%, rgba(96, 165, 250, 0.08), transparent 18%),
-    linear-gradient(180deg, #0f131a 0%, #0b0f14 100%);
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.04), transparent 20%),
+    radial-gradient(circle at 72% 8%, rgba(96, 165, 250, 0.025), transparent 14%),
+    linear-gradient(180deg, #0b1220 0%, #090c10 100%);
+  color: #eef2f7;
+  font-weight: 500;
 }
 
 body,
@@ -69,7 +72,7 @@ select {
 .money,
 .mantine-Table-root td[data-align='right'],
 .mantine-Table-root th[data-align='right'] {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
 }
 
 .fin-number {
@@ -78,19 +81,19 @@ select {
 }
 
 .glass-border {
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .premium-shell {
   background:
-    radial-gradient(circle at 18% 0%, rgba(20, 184, 166, 0.11), transparent 28%),
-    linear-gradient(180deg, #0b0f14 0%, #090d12 100%);
+    radial-gradient(circle at 18% 0%, rgba(20, 184, 166, 0.03), transparent 20%),
+    linear-gradient(180deg, #0b1220 0%, #090c10 100%);
 }
 
 .shell-navbar {
-  background: rgba(11, 15, 20, 0.92);
-  border-right: 1px solid rgba(148, 163, 184, 0.12);
-  backdrop-filter: blur(18px);
+  background: rgba(15, 23, 42, 0.88);
+  border-right: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(10px);
 }
 
 .shell-navbar.collapsed {
@@ -98,16 +101,16 @@ select {
 }
 
 .shell-header {
-  background: rgba(11, 15, 20, 0.86);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  backdrop-filter: blur(18px);
+  background: rgba(15, 23, 42, 0.86);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(10px);
 }
 
 .shell-main {
   min-height: calc(100vh - 56px);
   background:
-    radial-gradient(circle at 75% 0%, rgba(20, 184, 166, 0.08), transparent 22%),
-    linear-gradient(180deg, rgba(15, 19, 26, 0.96), rgba(10, 14, 20, 0.98));
+    radial-gradient(circle at 75% 0%, rgba(20, 184, 166, 0.02), transparent 16%),
+    linear-gradient(180deg, rgba(11, 18, 32, 0.98), rgba(9, 12, 16, 1));
 }
 
 .shell-sidebar-inner {
@@ -119,22 +122,30 @@ select {
 .sidebar-footer {
   padding: 0.75rem;
   border-radius: 16px;
-  background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
 .sidebar-group-title {
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
+}
+
+.ui-label {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.82;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .shell-nav-link {
   border-radius: 12px;
   margin: 0 0.25rem;
-  color: #cbd5e1;
+  color: #d7dee9;
 }
 
 .shell-nav-link[data-active='true'] {
-  background: rgba(20, 184, 166, 0.12);
+  background: rgba(20, 184, 166, 0.16);
   color: #f8fafc;
 }
 
@@ -142,18 +153,18 @@ select {
   width: 100%;
   justify-content: flex-start;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(15, 23, 42, 0.42);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.74);
 }
 
 .premium-card {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(10, 14, 20, 0.88));
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
 }
 
 .premium-card[data-variant='light'] {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.78), rgba(15, 23, 42, 0.84));
+  background: rgba(15, 23, 42, 0.9);
 }
 
 .stat-card {
@@ -162,14 +173,46 @@ select {
 
 .stat-value {
   letter-spacing: -0.05em;
-  font-size: 1.6rem;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  font-size: 28px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.financial-amount {
+  font: inherit;
+  color: inherit;
+}
+
+.dashboard-hero {
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.dashboard-hero .page-title {
+  font-size: clamp(1.6rem, 2vw, 2.3rem);
+  line-height: 1.05;
+}
+
+.dashboard-metrics {
+  margin-top: 0.25rem;
+}
+
+.dashboard-panel {
+  height: 100%;
+}
+
+.dashboard-count {
+  font-size: 2rem;
+  letter-spacing: -0.06em;
 }
 
 .page-header,
 .table-paper,
 .table-footer {
-  background: rgba(12, 17, 24, 0.84);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
 .page-title {
@@ -182,15 +225,15 @@ select {
 }
 
 .financial-table th {
-  background: rgba(15, 23, 42, 0.92);
-  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.94);
+  color: #d7dee9;
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
 .financial-table td {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 .financial-table tr:hover td {
@@ -232,8 +275,8 @@ select {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 35%, rgba(20, 184, 166, 0.18), transparent 18%),
-    radial-gradient(circle at 65% 55%, rgba(59, 130, 246, 0.14), transparent 20%);
+    radial-gradient(circle at 50% 35%, rgba(20, 184, 166, 0.04), transparent 12%),
+    radial-gradient(circle at 65% 55%, rgba(59, 130, 246, 0.03), transparent 12%);
   pointer-events: none;
 }
 
@@ -242,7 +285,7 @@ select {
 }
 
 .tenant-card.selected {
-  border-color: rgba(20, 184, 166, 0.6);
+  border-color: rgba(20, 184, 166, 0.8);
 }
 
 .command-item {
@@ -254,22 +297,22 @@ select {
 }
 
 .command-item:hover {
-  background: rgba(20, 184, 166, 0.08);
+  background: rgba(20, 184, 166, 0.1);
 }
 
 .notification-read {
-  opacity: 0.76;
+  opacity: 0.92;
 }
 
 .notification-unread {
-  border-color: rgba(20, 184, 166, 0.28);
+  border-color: rgba(20, 184, 166, 0.26);
 }
 
 .attachment-placeholder {
   min-height: 120px;
   display: grid;
   place-items: center;
-  background: rgba(15, 23, 42, 0.42);
+  background: rgba(15, 23, 42, 0.74);
 }
 
 .approval-item {
@@ -278,7 +321,7 @@ select {
 
 .activity-row {
   padding: 0.55rem 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .activity-row:last-child {

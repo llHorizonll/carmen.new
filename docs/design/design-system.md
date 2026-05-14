@@ -46,3 +46,21 @@
 - no toy UI
 - no giant border radius
 
+## Readability Rule
+Readability is more important than visual effects.
+
+Avoid:
+- excessive glow
+- low-opacity text
+- blurry overlays
+- neon cyberpunk aesthetics
+
+Financial UI must remain readable at a glance in operational environments.
+
+Design for:
+- finance operators
+- accountants
+- controllers
+- month-end close workflows
+
+Not for gaming aesthetics.

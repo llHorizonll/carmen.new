@@ -11,7 +11,7 @@ export function SettingsPage() {
           <Grid.Col key={title} span={{ base: 12, md: 6 }}>
             <PremiumCard p="md">
               <Text fw={700}>{title}</Text>
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="gray.4" fw={500}>
                 Placeholder configuration panel for {title.toLowerCase()}.
               </Text>
             </PremiumCard>

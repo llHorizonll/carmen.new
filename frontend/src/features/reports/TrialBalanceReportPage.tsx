@@ -67,7 +67,7 @@ export function TrialBalanceReportPage() {
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
             <PremiumCard p="md">
-              <Text size="xs" tt="uppercase" fw={700} c="dimmed">{label}</Text>
+              <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>{label}</Text>
               <Text fw={700}>{typeof value === 'number' ? formatCompactAmount(value as number) : String(value)}</Text>
             </PremiumCard>
           </Grid.Col>
@@ -80,7 +80,7 @@ export function TrialBalanceReportPage() {
         subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         footer={
           <Group justify="space-between">
-            <Text size="sm" c="dimmed">Summary footer</Text>
+            <Text size="sm" c="gray.4" fw={500}>Summary footer</Text>
             <Group gap="lg">
               <Text size="sm">Closing debit {formatCompactAmount(totals.closingDebit)}</Text>
               <Text size="sm">Closing credit {formatCompactAmount(totals.closingCredit)}</Text>

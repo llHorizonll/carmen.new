@@ -14,7 +14,7 @@ export function TenantSwitcher() {
       <Menu.Target>
         <Button variant="subtle" rightSection={<IconChevronDown size={14} />} className="tenant-switcher-button">
           <Stack gap={0} align="flex-start">
-            <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
+            <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
               Tenant
             </Text>
             <Text size="sm" fw={600} lineClamp={1}>
@@ -31,7 +31,7 @@ export function TenantSwitcher() {
               <Menu.Item key={tenant.id} onClick={() => setTenant(tenant.id)}>
                 <Stack gap={2}>
                   <Text fw={700}>{tenant.groupName}</Text>
-                  <Text size="xs" c="dimmed">
+                  <Text size="xs" c="rgba(255,255,255,.76)" fw={500}>
                     {tenant.region} | {tenant.activeProperties} properties
                   </Text>
                   <Badge variant="light" color={tenant.closeStatus === 'Hard Close' ? 'teal' : tenant.closeStatus === 'Soft Close' ? 'yellow' : 'gray'}>

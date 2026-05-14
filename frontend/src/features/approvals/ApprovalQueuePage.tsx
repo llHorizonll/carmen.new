@@ -25,8 +25,8 @@ export function ApprovalQueuePage() {
                       </Badge>
                     </Group>
                     <Text fw={700}>{item.requester}</Text>
-                    <Text size="sm" c="dimmed">{item.preview}</Text>
-                    <Text size="xs" c="dimmed">SLA {item.sla}</Text>
+                    <Text size="sm" c="gray.4" fw={500}>{item.preview}</Text>
+                    <Text size="xs" c="gray.4" fw={500}>SLA {item.sla}</Text>
                   </Stack>
                   <Stack align="flex-end">
                     <Text fw={700}>{formatCompactAmount(item.amount)}</Text>
@@ -46,10 +46,10 @@ export function ApprovalQueuePage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Side preview</Text>
-              <Text size="sm" c="dimmed">{selected?.preview}</Text>
-              <Text size="sm" c="dimmed">Requester {selected?.requester}</Text>
-              <Text size="sm" c="dimmed">Group {selected?.group}</Text>
-              <Text size="sm" c="dimmed">SLA {selected?.sla}</Text>
+              <Text size="sm" c="gray.4" fw={500}>{selected?.preview}</Text>
+              <Text size="sm" c="gray.4" fw={500}>Requester {selected?.requester}</Text>
+              <Text size="sm" c="gray.4" fw={500}>Group {selected?.group}</Text>
+              <Text size="sm" c="gray.4" fw={500}>SLA {selected?.sla}</Text>
             </Stack>
           </PremiumCard>
         </Grid.Col>

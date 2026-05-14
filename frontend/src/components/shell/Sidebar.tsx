@@ -78,7 +78,7 @@ export function Sidebar() {
           {!collapsed ? (
             <Box>
               <Text fw={700}>Carmen Cloud Finance</Text>
-              <Text size="xs" c="dimmed">
+              <Text size="xs" c="rgba(255,255,255,.78)" fw={500}>
                 Hotel Accounting Operations
               </Text>
             </Box>
@@ -91,11 +91,11 @@ export function Sidebar() {
 
       {!collapsed ? (
         <Stack gap={6} className="sidebar-meta">
-          <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+          <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
             Signed in
           </Text>
           <Text fw={600}>{session?.user.name}</Text>
-          <Text size="sm" c="dimmed" lineClamp={1}>
+          <Text size="sm" c="rgba(255,255,255,.78)" fw={500} lineClamp={1}>
             {session?.user.email}
           </Text>
           <TenantSwitcher />
@@ -109,7 +109,7 @@ export function Sidebar() {
         {groups.map((group) => (
           <Stack key={group.title} gap={4}>
             {!collapsed ? (
-              <Text size="xs" tt="uppercase" c="dimmed" fw={700} className="sidebar-group-title">
+              <Text className="ui-label sidebar-group-title" c="rgba(255,255,255,.82)" fw={700}>
                 {group.title}
               </Text>
             ) : null}
@@ -137,11 +137,11 @@ export function Sidebar() {
 
       {!collapsed ? (
         <Box className="sidebar-footer">
-          <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
+          <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
             Active tenant
           </Text>
           <Text fw={700}>{selectedTenantId ?? 'Select tenant'}</Text>
-          <Text size="sm" c="dimmed">
+          <Text size="sm" c="rgba(255,255,255,.78)" fw={500}>
             Realtime-ready PocketBase shell.
           </Text>
         </Box>

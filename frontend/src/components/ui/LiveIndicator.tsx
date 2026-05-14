@@ -12,11 +12,11 @@ export function LiveIndicator({ status, label }: LiveIndicatorProps) {
   const icon = status === 'live' ? <IconWifi size={14} /> : status === 'reconnecting' ? <IconLoader2 size={14} /> : <IconWifiOff size={14} />
 
   return (
-    <Group gap={6} wrap="nowrap">
-      <Text c={tone} fw={700} size="xs" tt="uppercase" className="live-indicator">
+    <Group gap={8} wrap="nowrap">
+      <Text c={tone} fw={700} size="sm" className="live-indicator">
         {icon}
       </Text>
-      <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
+      <Text size="sm" c="rgba(255,255,255,.72)" fw={600}>
         {label ?? status}
       </Text>
     </Group>

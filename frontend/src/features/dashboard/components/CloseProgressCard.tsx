@@ -6,7 +6,7 @@ export function CloseProgressCard({ value }: { value: number }) {
   return (
     <PremiumCard p="md">
       <Stack gap={8}>
-        <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+        <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
           Month-end close progress
         </Text>
         <Text fw={700} size="xl">

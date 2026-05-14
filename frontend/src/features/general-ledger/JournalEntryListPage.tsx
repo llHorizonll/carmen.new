@@ -91,7 +91,7 @@ export function JournalEntryListPage() {
         badge={<Badge variant="light" color="gray">General Ledger</Badge>}
         title="Journal Entry List"
         subtitle="Dense operational journal control with filters, sticky headers, and finance-friendly amounts."
-        actions={<Group gap="xs"><IconKeyboard size={14} /><Text size="sm" c="dimmed">N = New Entry</Text></Group>}
+        actions={<Group gap="xs"><IconKeyboard size={14} /><Text size="sm" c="gray.4" fw={500}>N = New Entry</Text></Group>}
       />
 
       <Grid>
@@ -120,7 +120,7 @@ export function JournalEntryListPage() {
         onRowClick={(row) => navigate(`/app/general-ledger/${row.id}`)}
         footer={
           <Group justify="space-between">
-            <Text size="sm" c="dimmed">
+              <Text size="sm" c="gray.4" fw={500}>
               Summary row
             </Text>
             <Group gap="lg">

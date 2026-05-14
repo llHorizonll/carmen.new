@@ -13,7 +13,7 @@ export function SectionHeader({ title, subtitle, action }: SectionHeaderProps) {
       <div>
         <Text fw={700}>{title}</Text>
         {subtitle ? (
-          <Text size="sm" c="dimmed">
+          <Text size="sm" c="rgba(255,255,255,.76)" fw={500} lh={1.5}>
             {subtitle}
           </Text>
         ) : null}

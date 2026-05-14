@@ -10,7 +10,7 @@ export function RealtimeActivityFeed({
   return (
     <PremiumCard p="md">
       <Stack gap="sm">
-        <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+        <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
           Realtime hotel activity
         </Text>
         {items.map((item) => (
@@ -19,10 +19,10 @@ export function RealtimeActivityFeed({
               {item.type}
             </Badge>
             <Text fw={600}>{item.title}</Text>
-            <Text size="sm" c="dimmed">
+            <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
               {item.detail}
             </Text>
-            <Text size="xs" c="dimmed">
+            <Text size="xs" c="rgba(255,255,255,.72)" fw={500}>
               {formatDateTime(item.timestamp)} | {formatCurrency(item.amount)}
             </Text>
           </Stack>

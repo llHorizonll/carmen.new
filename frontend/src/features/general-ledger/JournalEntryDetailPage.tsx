@@ -76,7 +76,7 @@ export function JournalEntryDetailPage() {
               <Group justify="space-between">
                 <div>
                   <Text fw={700}>Journal lines</Text>
-                  <Text size="sm" c="dimmed">
+                  <Text size="sm" c="gray.4" fw={500}>
                     Account-level debit and credit lines with balancing controls.
                   </Text>
                 </div>
@@ -92,7 +92,7 @@ export function JournalEntryDetailPage() {
                 columns={lineColumns}
                 footer={
                   <Group justify="space-between">
-                    <Text size="sm" c="dimmed">Difference</Text>
+                    <Text size="sm" c="gray.4" fw={500}>Difference</Text>
                     <Text fw={700} className="mono fin-number">
                       {formatCompactAmount(entry?.difference ?? 0)}
                     </Text>
@@ -106,15 +106,15 @@ export function JournalEntryDetailPage() {
           <Stack gap="md">
             <PremiumCard p="md">
               <Stack gap={6}>
-                <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+                <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>
                   Approval panel
                 </Text>
                 <Title order={3}>{entry?.approvalStatus}</Title>
                 <ApprovalStatus value={entry?.status ?? 'Draft'} />
-                <Text size="sm" c="dimmed">
+                <Text size="sm" c="gray.4" fw={500}>
                   Posted by {entry?.postedBy}
                 </Text>
-                <Text size="sm" c="dimmed">
+                <Text size="sm" c="gray.4" fw={500}>
                   Updated {formatDateTime(entry?.updatedAt ?? new Date().toISOString())}
                 </Text>
               </Stack>
@@ -128,10 +128,10 @@ export function JournalEntryDetailPage() {
             <PremiumCard p="md">
               <Stack gap={4}>
                 <Text fw={700}>Header summary</Text>
-                <Text size="sm" c="dimmed">
+                <Text size="sm" c="gray.4" fw={500}>
                   JE {entry?.jeNumber} | {entry?.property}
                 </Text>
-                <Text size="sm" c="dimmed">
+                <Text size="sm" c="gray.4" fw={500}>
                   Posted date {formatDate(entry?.date ?? new Date().toISOString())}
                 </Text>
               </Stack>

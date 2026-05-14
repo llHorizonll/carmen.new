@@ -40,11 +40,11 @@ export function LoginPage() {
       >
         <Stack gap="md">
           <div>
-            <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+            <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
               Carmen Cloud Finance
             </Text>
             <Title order={2}>Hotel Accounting Operations</Title>
-            <Text c="dimmed" size="sm" mt={6}>
+            <Text c="rgba(255,255,255,.76)" size="sm" mt={6} fw={500} lh={1.55}>
               Tenant-aware access for hospitality finance teams.
             </Text>
           </div>
@@ -52,7 +52,7 @@ export function LoginPage() {
             <Stack gap="sm">
               <TextInput label="Email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} placeholder="finance@hotelgroup.com" required />
               <PasswordInput label="Password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} placeholder="********" required />
-              <Text size="xs" c="dimmed">
+              <Text size="xs" c="rgba(255,255,255,.76)" fw={500}>
                 {loginHint}
               </Text>
               <Button type="submit" loading={loading} rightSection={<IconArrowRight size={16} />}>

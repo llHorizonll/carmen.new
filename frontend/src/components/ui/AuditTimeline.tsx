@@ -16,11 +16,11 @@ export function AuditTimeline({ items }: AuditTimelineProps) {
     <Stack gap="sm">
       {items.map((item, index) => (
         <Box key={`${item.timestamp}-${index}`}>
-          <Text size="xs" c="dimmed" tt="uppercase" fw={700}>
+          <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
             {formatDateTime(item.timestamp)}
           </Text>
           <Text fw={600}>{item.title}</Text>
-          <Text size="sm" c="dimmed">
+          <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
             {item.detail}
           </Text>
           {index < items.length - 1 ? <Divider my="sm" /> : null}

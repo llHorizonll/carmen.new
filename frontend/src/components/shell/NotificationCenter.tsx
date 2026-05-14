@@ -37,7 +37,7 @@ export function NotificationCenter() {
           <Stack gap="md">
             {Object.entries(grouped).map(([bucket, bucketItems]) => (
               <Stack key={bucket} gap="xs">
-                <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+                <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
                   {bucket}
                 </Text>
                 {bucketItems.map((item) => (
@@ -48,10 +48,10 @@ export function NotificationCenter() {
                           <IconCircle size={10} />
                           <Text fw={700}>{item.title}</Text>
                         </Group>
-                        <Text size="sm" c="dimmed">
+                        <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                           {item.message}
                         </Text>
-                        <Text size="xs" c="dimmed">
+                        <Text size="xs" c="rgba(255,255,255,.72)" fw={500}>
                           {formatDateTime(item.timestamp)}
                         </Text>
                       </Stack>

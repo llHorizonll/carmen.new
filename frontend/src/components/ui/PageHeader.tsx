@@ -18,7 +18,7 @@ export function PageHeader({ title, subtitle, badge, actions }: PageHeaderProps)
           <Title order={1} className="page-title">
             {title}
           </Title>
-          <Text c="dimmed" maw={860}>
+          <Text c="rgba(255,255,255,.76)" maw={860} size="sm" fw={500} lh={1.55}>
             {subtitle}
           </Text>
         </Stack>

@@ -52,22 +52,22 @@ export function APInvoiceDetailPage() {
               <Group justify="space-between">
                 <div>
                   <Text fw={700}>Invoice summary</Text>
-                  <Text size="sm" c="dimmed">
+                  <Text size="sm" c="gray.4" fw={500}>
                     Invoice header, amount breakdown, and payment context.
                   </Text>
                 </div>
                 <LiveIndicator status="live" label="Approval status updating" />
               </Group>
               <Group justify="space-between">
-                <Text c="dimmed">Invoice amount</Text>
+                <Text c="gray.4" fw={500}>Invoice amount</Text>
                 <Text fw={700} className="mono fin-number">{formatCompactAmount(invoice?.amount ?? 0)}</Text>
               </Group>
               <Group justify="space-between">
-                <Text c="dimmed">Balance</Text>
+                <Text c="gray.4" fw={500}>Balance</Text>
                 <Text fw={700} className="mono fin-number">{formatCompactAmount(invoice?.balance ?? 0)}</Text>
               </Group>
               <Group justify="space-between">
-                <Text c="dimmed">Approval</Text>
+                <Text c="gray.4" fw={500}>Approval</Text>
                 <ApprovalStatus value={invoice?.status ?? 'Pending Approval'} />
               </Group>
               <FinancialTable data={invoice?.glDistribution ?? []} columns={glColumns} title="GL distribution" />
@@ -78,17 +78,17 @@ export function APInvoiceDetailPage() {
           <Stack gap="md">
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text size="xs" tt="uppercase" fw={700} c="dimmed">Vendor</Text>
+                <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Vendor</Text>
                 <Title order={3}>{invoice?.vendor}</Title>
-                <Text size="sm" c="dimmed">{invoice?.property}</Text>
-                <Text size="sm" c="dimmed">Invoice date {formatDate(invoice?.invoiceDate ?? new Date().toISOString())}</Text>
-                <Text size="sm" c="dimmed">Due date {formatDate(invoice?.dueDate ?? new Date().toISOString())}</Text>
+                <Text size="sm" c="gray.4" fw={500}>{invoice?.property}</Text>
+                <Text size="sm" c="gray.4" fw={500}>Invoice date {formatDate(invoice?.invoiceDate ?? new Date().toISOString())}</Text>
+                <Text size="sm" c="gray.4" fw={500}>Due date {formatDate(invoice?.dueDate ?? new Date().toISOString())}</Text>
               </Stack>
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
                 <Text fw={700}>Approval workflow</Text>
-                <Text size="sm" c="dimmed">{invoice?.approval}</Text>
+                <Text size="sm" c="gray.4" fw={500}>{invoice?.approval}</Text>
                 <StatusBadge value={invoice?.status ?? 'Pending Approval'} />
               </Stack>
             </PremiumCard>
@@ -96,7 +96,7 @@ export function APInvoiceDetailPage() {
               <Stack gap={4}>
                 <Text fw={700}>Attachment</Text>
                 <Paper p="md" className="attachment-placeholder">
-                  <Text size="sm" c="dimmed">Invoice PDF preview placeholder</Text>
+                  <Text size="sm" c="gray.4" fw={500}>Invoice PDF preview placeholder</Text>
                 </Paper>
               </Stack>
             </PremiumCard>
@@ -104,7 +104,7 @@ export function APInvoiceDetailPage() {
               <Stack gap={4}>
                 <Text fw={700}>Payment history</Text>
                 {(invoice?.paymentHistory ?? []).map((item) => (
-                  <Text key={item} size="sm" c="dimmed">{item}</Text>
+                  <Text key={item} size="sm" c="gray.4" fw={500}>{item}</Text>
                 ))}
               </Stack>
             </PremiumCard>

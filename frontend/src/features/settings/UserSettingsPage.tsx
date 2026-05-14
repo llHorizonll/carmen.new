@@ -28,7 +28,9 @@ export function UserSettingsPage() {
             <Stack gap="sm">
               <Text fw={700}>Theme settings</Text>
               <Group justify="space-between">
-                <Text size="sm" c="dimmed">Dark mode first</Text>
+                <Text size="sm" c="gray.4" fw={500}>
+                  Dark mode first
+                </Text>
                 <Switch checked={colorScheme === 'dark'} onChange={toggleColorScheme} />
               </Group>
               <Select label="Default fiscal period" data={['FY2026 P04', 'FY2026 P05', 'FY2026 P06']} value={fiscalPeriod} onChange={(value) => value && setFiscalPeriod(value)} />
@@ -39,9 +41,24 @@ export function UserSettingsPage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Notification preferences</Text>
-              <Group justify="space-between"><Text size="sm" c="dimmed">Invoice approvals</Text><Switch defaultChecked /></Group>
-              <Group justify="space-between"><Text size="sm" c="dimmed">Journal postings</Text><Switch defaultChecked /></Group>
-              <Group justify="space-between"><Text size="sm" c="dimmed">Anomalies</Text><Switch defaultChecked /></Group>
+              <Group justify="space-between">
+                <Text size="sm" c="gray.4" fw={500}>
+                  Invoice approvals
+                </Text>
+                <Switch defaultChecked />
+              </Group>
+              <Group justify="space-between">
+                <Text size="sm" c="gray.4" fw={500}>
+                  Journal postings
+                </Text>
+                <Switch defaultChecked />
+              </Group>
+              <Group justify="space-between">
+                <Text size="sm" c="gray.4" fw={500}>
+                  Anomalies
+                </Text>
+                <Switch defaultChecked />
+              </Group>
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -49,10 +66,18 @@ export function UserSettingsPage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Keyboard shortcuts</Text>
-              <Text size="sm" c="dimmed">Ctrl/Cmd + K · command menu</Text>
-              <Text size="sm" c="dimmed">N · new journal entry</Text>
-              <Text size="sm" c="dimmed">G then A · open AP</Text>
-              <Text size="sm" c="dimmed">G then R · open AR</Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                Ctrl/Cmd + K | command menu
+              </Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                N | new journal entry
+              </Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                G then A | open AP
+              </Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                G then R | open AR
+              </Text>
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -60,7 +85,9 @@ export function UserSettingsPage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Security</Text>
-              <Text size="sm" c="dimmed">MFA status, session duration, and device controls.</Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                MFA status, session duration, and device controls.
+              </Text>
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -68,7 +95,9 @@ export function UserSettingsPage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Session list</Text>
-              <Text size="sm" c="dimmed">Placeholder for current and recent sessions.</Text>
+              <Text size="sm" c="gray.4" fw={500}>
+                Placeholder for current and recent sessions.
+              </Text>
             </Stack>
           </PremiumCard>
         </Grid.Col>

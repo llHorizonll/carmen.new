@@ -19,26 +19,26 @@ export function HotelPerformanceGrid({
               </Badge>
             </Group>
             <Group justify="space-between">
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                 Revenue
               </Text>
               <Text fw={600}>{formatCurrency(item.revenue)}</Text>
             </Group>
             <Group justify="space-between">
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                 Occupancy
               </Text>
               <Text fw={600}>{formatPercent(item.occupancy)}</Text>
             </Group>
             <Progress value={item.occupancy * 100} size="sm" />
             <Group justify="space-between">
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                 Margin
               </Text>
               <Text fw={600}>{formatPercent(item.margin)}</Text>
             </Group>
             <Group justify="space-between">
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                 Exceptions
               </Text>
               <Text fw={600}>{formatNumber(item.exceptions)}</Text>

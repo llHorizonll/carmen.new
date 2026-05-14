@@ -50,7 +50,7 @@ export function Topbar() {
       <Group gap="sm" wrap="nowrap" className="shell-breadcrumbs">
         <Breadcrumbs separator={<IconChevronRight size={12} />}>
           {crumbs.map((crumb) => (
-            <Text key={crumb} size="sm" c="dimmed" fw={600}>
+            <Text key={crumb} size="sm" c="rgba(255,255,255,.72)" fw={600}>
               {crumb}
             </Text>
           ))}

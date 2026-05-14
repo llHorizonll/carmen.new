@@ -1,7 +1,6 @@
-import { Box, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core'
+import { Box, Group, Stack, Text, ThemeIcon } from '@mantine/core'
 import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react'
 import { PremiumCard } from './PremiumCard'
-import { AmountText } from './AmountText'
 
 type StatCardProps = {
   label: string
@@ -12,32 +11,30 @@ type StatCardProps = {
 }
 
 export function StatCard({ label, value, delta, trend = 'flat', hint }: StatCardProps) {
+  const isMoney = value.startsWith('฿') || value.startsWith('$') || value.startsWith('-฿') || value.startsWith('-$')
+
   return (
     <PremiumCard className="stat-card" p="md">
       <Stack gap={8}>
         <Group justify="space-between" align="flex-start">
           <Box>
-            <Text size="xs" tt="uppercase" c="dimmed" fw={700}>
+            <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
               {label}
             </Text>
             {hint ? (
-              <Text size="xs" c="dimmed" mt={2}>
+              <Text size="xs" c="rgba(255,255,255,.72)" mt={2} fw={500}>
                 {hint}
               </Text>
             ) : null}
           </Box>
-          <ThemeIcon
-            size="sm"
-            variant="light"
-            color={trend === 'up' ? 'teal' : trend === 'down' ? 'red' : 'gray'}
-          >
+          <ThemeIcon size="sm" variant="light" color={trend === 'up' ? 'teal' : trend === 'down' ? 'red' : 'gray'}>
             {trend === 'down' ? <IconArrowDownRight size={14} /> : <IconArrowUpRight size={14} />}
           </ThemeIcon>
         </Group>
-        <Title order={2} className="stat-value">
-          {value.includes('฿') || value.includes('$') ? <AmountText value={value} /> : value}
-        </Title>
-        <Text size="sm" c="dimmed">
+        <Text component="div" className="stat-value">
+          {isMoney ? <span className="financial-amount">{value}</span> : value}
+        </Text>
+        <Text size="sm" c="rgba(255,255,255,.72)" fw={500}>
           {delta}
         </Text>
       </Stack>

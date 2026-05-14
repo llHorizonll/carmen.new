@@ -39,11 +39,11 @@ export function TenantSelectionPage() {
         <PremiumCard p="lg">
           <Group justify="space-between" align="flex-start" wrap="wrap">
             <div>
-              <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+              <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
                 Tenant selection
               </Text>
               <Title order={1}>Choose the active hotel group</Title>
-              <Text c="dimmed" maw={760}>
+              <Text c="rgba(255,255,255,.76)" maw={760} size="sm" fw={500} lh={1.55}>
                 Select the tenant that scopes all reporting, approvals, and realtime updates.
               </Text>
             </div>
@@ -88,7 +88,7 @@ export function TenantSelectionPage() {
                     <Group justify="space-between" align="flex-start">
                       <div>
                         <Text fw={700}>{tenant.groupName}</Text>
-                        <Text size="sm" c="dimmed">
+                        <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                           {tenant.region}
                         </Text>
                       </div>
@@ -97,19 +97,19 @@ export function TenantSelectionPage() {
                       </Badge>
                     </Group>
                     <Group justify="space-between">
-                      <Text size="sm" c="dimmed">
+                      <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                         Active properties
                       </Text>
                       <Text fw={600}>{tenant.activeProperties}</Text>
                     </Group>
                     <Group justify="space-between">
-                      <Text size="sm" c="dimmed">
+                      <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                         Fiscal period
                       </Text>
                       <Text fw={600}>{tenant.fiscalPeriod}</Text>
                     </Group>
                     <Group justify="space-between">
-                      <Text size="sm" c="dimmed">
+                      <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                         Properties
                       </Text>
                       <Text fw={600} ta="right">

@@ -52,21 +52,21 @@ export function AuditLogsPage() {
         <Grid.Col span={{ base: 12, md: 3 }}><TextInput label="Date" type="date" value={dateFilter} onChange={(event) => setDateFilter(event.currentTarget.value)} /></Grid.Col>
       </Grid>
       <Grid>
-        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={700} c="dimmed">Success</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Success').length}</Text></PremiumCard></Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={700} c="dimmed">Pending</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Pending').length}</Text></PremiumCard></Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={700} c="dimmed">Failed</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Failed').length}</Text></PremiumCard></Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={700} c="dimmed">Rows</Text><Text fw={700}>{filtered.length}</Text></PremiumCard></Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Success</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Success').length}</Text></PremiumCard></Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Pending</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Pending').length}</Text></PremiumCard></Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Failed</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Failed').length}</Text></PremiumCard></Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Rows</Text><Text fw={700}>{filtered.length}</Text></PremiumCard></Grid.Col>
       </Grid>
       <FinancialTable data={filtered} columns={columns} title="Audit entries" onRowClick={(row) => { setSelected(row); openDrawer(); }} />
       <Drawer opened={open} onClose={close} position="right" title="Audit detail" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.action}</Text>
-          <Text size="sm" c="dimmed">{selected?.detail}</Text>
-          <Text size="sm" c="dimmed">Module {selected?.module}</Text>
-          <Text size="sm" c="dimmed">Entity {selected?.entity}</Text>
-          <Text size="sm" c="dimmed">Property {selected?.property}</Text>
-          <Text size="sm" c="dimmed">IP {selected?.ipAddress}</Text>
-          <Text size="sm" c="dimmed">Timestamp {formatDateTime(selected?.timestamp ?? new Date().toISOString())}</Text>
+          <Text size="sm" c="gray.4" fw={500}>{selected?.detail}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Module {selected?.module}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Entity {selected?.entity}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Property {selected?.property}</Text>
+          <Text size="sm" c="gray.4" fw={500}>IP {selected?.ipAddress}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Timestamp {formatDateTime(selected?.timestamp ?? new Date().toISOString())}</Text>
         </Stack>
       </Drawer>
     </Stack>

@@ -104,7 +104,7 @@ export function APInvoiceListPage() {
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text size="xs" tt="uppercase" fw={700} c="dimmed">
+                <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>
                   {label}
                 </Text>
                 <Text fw={700}>{formatCompactAmount(value as number)}</Text>
