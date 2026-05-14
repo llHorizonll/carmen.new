@@ -319,6 +319,10 @@ export async function fetchNotifications() {
   return fetchCollectionList<NotificationItem>(collectionNames.notifications, () => notifications)
 }
 
+export async function fetchNotificationsForTenant(filters: QueryFilters) {
+  return fetchCollectionList<NotificationItem>(collectionNames.notifications, () => notifications, filters)
+}
+
 export async function fetchUsers() {
   return fetchCollectionList<UserRecord>(collectionNames.users, () => users)
 }
