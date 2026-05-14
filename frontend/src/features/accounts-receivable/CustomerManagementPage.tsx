@@ -9,13 +9,13 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchCustomers } from '../../lib/pocketbase'
+import { fetchCustomers, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate } from '../../lib/formatters'
 
 export function CustomerManagementPage() {
   const tenantId = useAuthStore((state) => state.activeTenantId) ?? 'tenant-carmen'
   const fiscalPeriod = useTenantStore((state) => state.fiscalPeriod)
-  const query = useQuery({ queryKey: ['customers', tenantId, fiscalPeriod], queryFn: () => fetchCustomers({ tenantId, fiscalPeriod }) })
+  const query = useQuery({ queryKey: makeQueryKey('customers', { tenantId, fiscalPeriod }), queryFn: () => fetchCustomers({ tenantId, fiscalPeriod }) })
   const customers = useMemo(() => query.data ?? [], [query.data])
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<(typeof customers)[number] | null>(null)
@@ -69,7 +69,7 @@ export function CustomerManagementPage() {
           </Grid.Col>
         ))}
       </Grid>
-      <FinancialTable data={filtered} columns={columns} title="Customers" subtitle={`Tenant ${tenantId} · ${fiscalPeriod}`} onRowClick={(row) => { setSelected(row); openDrawer(); }} />
+      <FinancialTable data={filtered} columns={columns} title="Customers" subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`} onRowClick={(row) => { setSelected(row); openDrawer(); }} />
       <Drawer opened={open} onClose={close} position="right" title="Customer summary" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>

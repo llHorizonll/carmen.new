@@ -10,7 +10,7 @@ import { FinancialTable } from '../../components/tables/FinancialTable'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
 import { useNotificationStore } from '../../stores/notification.store'
-import { fetchDashboardSnapshot } from '../../lib/pocketbase'
+import { fetchDashboardSnapshot, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatCurrency, formatDateTime } from '../../lib/formatters'
 import { CashPositionCard } from './components/CashPositionCard'
 import { RevenueCard } from './components/RevenueCard'
@@ -29,7 +29,7 @@ export function DashboardPage() {
   const lastSyncAt = useNotificationStore((state) => state.lastSyncAt)
 
   const snapshotQuery = useQuery({
-    queryKey: ['dashboard', activeTenantId, selectedPropertyId, fiscalPeriod],
+    queryKey: makeQueryKey('dashboard', { tenantId: activeTenantId, propertyId: selectedPropertyId, fiscalPeriod }),
     queryFn: () => fetchDashboardSnapshot({ tenantId: activeTenantId, propertyId: selectedPropertyId, fiscalPeriod }),
   })
 

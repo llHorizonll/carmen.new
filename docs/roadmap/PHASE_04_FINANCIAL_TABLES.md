@@ -16,5 +16,4 @@ Establish the table system used across accounting modules.
 - Shared table patterns are reusable
 
 ## Status
-- Not started
-
+- Complete

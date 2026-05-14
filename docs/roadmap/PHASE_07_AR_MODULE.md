@@ -14,5 +14,4 @@ Implement AR invoice workflows and customer management.
 - customer state remains tenant-scoped
 
 ## Status
-- Not started
-
+- Complete

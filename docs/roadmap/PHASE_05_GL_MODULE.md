@@ -15,5 +15,4 @@ Implement journal entry list and journal entry detail flows.
 - balance indicators work correctly
 
 ## Status
-- Not started
-
+- Complete

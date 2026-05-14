@@ -58,7 +58,7 @@ export function JournalEntryDetailPage() {
       <PageHeader
         badge={<Badge variant="light" color={entry?.status === 'Posted' ? 'teal' : 'yellow'}>Journal Entry</Badge>}
         title={entry?.jeNumber ?? entryId}
-        subtitle={`${entry?.property ?? ''} · ${formatDate(entry?.date ?? new Date().toISOString())} · ${entry?.source ?? ''}`}
+        subtitle={`${entry?.property ?? ''} | ${formatDate(entry?.date ?? new Date().toISOString())} | ${entry?.source ?? ''}`}
         actions={
           <Group gap="xs">
             <Button>Post</Button>
@@ -129,7 +129,7 @@ export function JournalEntryDetailPage() {
               <Stack gap={4}>
                 <Text fw={700}>Header summary</Text>
                 <Text size="sm" c="dimmed">
-                  JE {entry?.jeNumber} · {entry?.property}
+                  JE {entry?.jeNumber} | {entry?.property}
                 </Text>
                 <Text size="sm" c="dimmed">
                   Posted date {formatDate(entry?.date ?? new Date().toISOString())}

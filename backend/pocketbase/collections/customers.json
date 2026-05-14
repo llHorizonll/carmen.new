@@ -1,0 +1,21 @@
+{
+  "name": "customers",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "code", "type": "text", "required": true },
+    { "name": "name", "type": "text", "required": true },
+    { "name": "segment", "type": "text", "required": true },
+    { "name": "creditLimit", "type": "number", "required": true },
+    { "name": "outstanding", "type": "number", "required": true },
+    { "name": "agingBucket", "type": "text", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Active", "Watch", "Blocked"] } },
+    { "name": "lastInvoice", "type": "date", "required": false }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

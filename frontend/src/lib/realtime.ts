@@ -1,3 +1,4 @@
+import { isPocketBaseConfigured, getPocketBaseClient } from './pocketbase'
 import type { ConnectionStatus, NotificationItem } from './mockData'
 
 type RealtimeHandlers = {
@@ -7,7 +8,7 @@ type RealtimeHandlers = {
 
 const statusSequence: ConnectionStatus[] = ['live', 'live', 'reconnecting', 'live']
 
-export function startMockRealtime(handlers: RealtimeHandlers) {
+function createMockStream(handlers: RealtimeHandlers) {
   let active = true
   let counter = 0
 
@@ -66,4 +67,47 @@ export function startMockRealtime(handlers: RealtimeHandlers) {
     window.clearInterval(timer)
     window.clearTimeout(boot)
   }
+}
+
+function createPocketBaseStream(handlers: RealtimeHandlers) {
+  const pb = getPocketBaseClient()
+  if (!pb) {
+    return createMockStream(handlers)
+  }
+
+  let active = true
+  handlers.onStatus('live')
+
+  const subscribe = async () => {
+    try {
+      await pb.collection('notifications').subscribe('*', (event) => {
+        if (!active) {
+          return
+        }
+
+        const record = event.record as Record<string, unknown>
+        handlers.onEvent({
+          id: String(record.id ?? `pb-${Date.now()}`),
+          type: (record.type as NotificationItem['type']) ?? 'sync completed',
+          title: String(record.title ?? 'Realtime update'),
+          message: String(record.message ?? 'PocketBase realtime event received.'),
+          timestamp: String(record.timestamp ?? new Date().toISOString()),
+          read: Boolean(record.read ?? false),
+        })
+      })
+    } catch {
+      handlers.onStatus('offline')
+    }
+  }
+
+  void subscribe()
+
+  return () => {
+    active = false
+    void pb.collection('notifications').unsubscribe('*')
+  }
+}
+
+export function startMockRealtime(handlers: RealtimeHandlers) {
+  return isPocketBaseConfigured() ? createPocketBaseStream(handlers) : createMockStream(handlers)
 }

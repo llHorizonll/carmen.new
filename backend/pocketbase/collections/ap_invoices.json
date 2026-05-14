@@ -1,0 +1,23 @@
+{
+  "name": "ap_invoices",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "vendorId", "type": "text", "required": true },
+    { "name": "propertyId", "type": "text", "required": true },
+    { "name": "invoiceNo", "type": "text", "required": true },
+    { "name": "invoiceDate", "type": "date", "required": true },
+    { "name": "dueDate", "type": "date", "required": true },
+    { "name": "amount", "type": "number", "required": true },
+    { "name": "balance", "type": "number", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Pending Approval", "Approved", "Paid", "Overdue"] } },
+    { "name": "approval", "type": "text", "required": false },
+    { "name": "aging", "type": "text", "required": false }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

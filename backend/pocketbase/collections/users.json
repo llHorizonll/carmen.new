@@ -1,0 +1,18 @@
+{
+  "name": "users",
+  "type": "auth",
+  "system": false,
+  "schema": [
+    { "name": "name", "type": "text", "required": true },
+    { "name": "role", "type": "text", "required": true },
+    { "name": "tenantIds", "type": "json", "required": false },
+    { "name": "defaultTenantId", "type": "text", "required": false },
+    { "name": "defaultFiscalPeriod", "type": "text", "required": false },
+    { "name": "mfaEnabled", "type": "bool", "required": false }
+  ],
+  "listRule": "@request.auth.id != ''",
+  "viewRule": "@request.auth.id = id || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.id = id || @request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

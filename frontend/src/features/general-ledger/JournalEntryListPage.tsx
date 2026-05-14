@@ -9,7 +9,7 @@ import { FinancialTable } from '../../components/tables/FinancialTable'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchJournalEntries } from '../../lib/pocketbase'
+import { fetchJournalEntries, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDateTime } from '../../lib/formatters'
 
 export function JournalEntryListPage() {
@@ -23,7 +23,7 @@ export function JournalEntryListPage() {
   const [endDate, setEndDate] = useState('')
 
   const query = useQuery({
-    queryKey: ['journal-entries', tenantId, fiscalPeriod],
+    queryKey: makeQueryKey('journal-entries', { tenantId, fiscalPeriod }),
     queryFn: () => fetchJournalEntries({ tenantId, fiscalPeriod }),
   })
 
@@ -116,7 +116,7 @@ export function JournalEntryListPage() {
         data={filtered}
         columns={columns}
         title="Journal entries"
-        subtitle={`Tenant ${tenantId} · ${fiscalPeriod}`}
+        subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         onRowClick={(row) => navigate(`/app/general-ledger/${row.id}`)}
         footer={
           <Group justify="space-between">

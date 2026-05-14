@@ -1,0 +1,22 @@
+{
+  "name": "audit_logs",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "timestamp", "type": "date", "required": true },
+    { "name": "user", "type": "text", "required": true },
+    { "name": "action", "type": "text", "required": true },
+    { "name": "module", "type": "text", "required": true },
+    { "name": "entity", "type": "text", "required": true },
+    { "name": "property", "type": "text", "required": true },
+    { "name": "ipAddress", "type": "text", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Success", "Failed", "Pending"] } },
+    { "name": "detail", "type": "text", "required": false }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

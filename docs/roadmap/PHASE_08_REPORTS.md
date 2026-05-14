@@ -15,5 +15,4 @@ Implement dense financial reporting views.
 - report tables use the shared financial standards
 
 ## Status
-- Not started
-
+- Complete

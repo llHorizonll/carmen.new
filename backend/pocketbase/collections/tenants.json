@@ -1,0 +1,18 @@
+{
+  "name": "tenants",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "groupName", "type": "text", "required": true },
+    { "name": "region", "type": "text", "required": true },
+    { "name": "fiscalPeriod", "type": "text", "required": true },
+    { "name": "closeStatus", "type": "select", "required": true, "options": { "values": ["Open", "Soft Close", "Hard Close"] } },
+    { "name": "activeProperties", "type": "number", "required": true },
+    { "name": "currency", "type": "select", "required": true, "options": { "values": ["THB", "USD"] } }
+  ],
+  "listRule": "@request.auth.id != ''",
+  "viewRule": "@request.auth.id != ''",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

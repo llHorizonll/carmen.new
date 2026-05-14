@@ -19,5 +19,4 @@ Deliver the realtime operational finance dashboard.
 - Snapshot data is tenant-aware
 
 ## Status
-- Not started
-
+- Complete

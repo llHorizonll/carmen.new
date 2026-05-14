@@ -1,0 +1,15 @@
+{
+  "name": "ap_invoice_lines",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "apInvoiceId", "type": "text", "required": true },
+    { "name": "account", "type": "text", "required": true },
+    { "name": "amount", "type": "number", "required": true }
+  ],
+  "listRule": "@request.auth.id != ''",
+  "viewRule": "@request.auth.id != ''",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { mockLogin } from '../../lib/pocketbase'
+import { clearPocketBaseSession, login } from '../../lib/pocketbase'
 import { useTenantStore } from '../../stores/tenant.store'
 
 export type AuthUser = {
@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
       session: null,
       activeTenantId: null,
       login: async (email, password) => {
-        const result = await mockLogin(email, password)
+        const result = await login(email, password)
         set({
           isAuthenticated: true,
           session: {
@@ -45,12 +45,14 @@ export const useAuthStore = create<AuthState>()(
           useTenantStore.getState().pushRecentTenant(recent)
         }
       },
-      logout: () =>
+      logout: () => {
+        clearPocketBaseSession()
         set({
           isAuthenticated: false,
           session: null,
           activeTenantId: null,
-        }),
+        })
+      },
       setActiveTenant: (tenantId) => {
         set({ activeTenantId: tenantId })
         if (tenantId) {

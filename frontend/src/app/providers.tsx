@@ -3,6 +3,7 @@ import { MantineProvider } from '@mantine/core'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { queryClient } from '../lib/queryClient'
+import { hydratePocketBaseSession } from '../lib/pocketbase'
 import { theme } from '../styles/theme'
 import { useAppStore } from '../stores/app.store'
 import { useAuthStore } from '../features/auth/auth.store'
@@ -39,12 +40,23 @@ function RealtimeBridge() {
   return null
 }
 
+function SessionBridge() {
+  const session = useAuthStore((state) => state.session)
+
+  useEffect(() => {
+    hydratePocketBaseSession(session)
+  }, [session])
+
+  return null
+}
+
 export function AppProviders({ children }: { children: ReactNode }) {
   const colorScheme = useAppStore((state) => state.colorScheme)
 
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme="dark" forceColorScheme={colorScheme}>
+        <SessionBridge />
         <RealtimeBridge />
         {children}
       </MantineProvider>

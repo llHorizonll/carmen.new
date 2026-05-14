@@ -1,0 +1,19 @@
+{
+  "name": "journal_lines",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "journalEntryId", "type": "text", "required": true },
+    { "name": "accountCode", "type": "text", "required": true },
+    { "name": "accountName", "type": "text", "required": true },
+    { "name": "department", "type": "text", "required": true },
+    { "name": "debit", "type": "number", "required": true },
+    { "name": "credit", "type": "number", "required": true },
+    { "name": "memo", "type": "text", "required": false }
+  ],
+  "listRule": "@request.auth.id != ''",
+  "viewRule": "@request.auth.id != ''",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

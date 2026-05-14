@@ -1,0 +1,24 @@
+{
+  "name": "journal_entries",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "propertyId", "type": "text", "required": true },
+    { "name": "jeNumber", "type": "text", "required": true },
+    { "name": "date", "type": "date", "required": true },
+    { "name": "source", "type": "text", "required": true },
+    { "name": "description", "type": "text", "required": true },
+    { "name": "debit", "type": "number", "required": true },
+    { "name": "credit", "type": "number", "required": true },
+    { "name": "difference", "type": "number", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Draft", "Approved", "Posted", "Rejected"] } },
+    { "name": "postedBy", "type": "text", "required": false },
+    { "name": "updatedAtLabel", "type": "text", "required": false }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

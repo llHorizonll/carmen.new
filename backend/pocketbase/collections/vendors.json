@@ -1,0 +1,22 @@
+{
+  "name": "vendors",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "code", "type": "text", "required": true },
+    { "name": "name", "type": "text", "required": true },
+    { "name": "category", "type": "text", "required": true },
+    { "name": "taxId", "type": "text", "required": false },
+    { "name": "balance", "type": "number", "required": true },
+    { "name": "paymentTerms", "type": "text", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Active", "Review", "Hold"] } },
+    { "name": "lastActivity", "type": "date", "required": false },
+    { "name": "risk", "type": "select", "required": false, "options": { "values": ["Low", "Medium", "High"] } }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

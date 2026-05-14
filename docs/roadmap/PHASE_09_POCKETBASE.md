@@ -15,5 +15,4 @@ Replace mock data boundaries with PocketBase-shaped services and tenant-aware co
 - tenant isolation stays intact
 
 ## Status
-- Not started
-
+- Complete

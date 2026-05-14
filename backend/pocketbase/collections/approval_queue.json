@@ -1,0 +1,20 @@
+{
+  "name": "approval_queue",
+  "type": "base",
+  "system": false,
+  "schema": [
+    { "name": "tenantId", "type": "text", "required": true },
+    { "name": "group", "type": "select", "required": true, "options": { "values": ["AP Invoice", "Journal Entry", "Payment Run", "Adjustment"] } },
+    { "name": "priority", "type": "select", "required": true, "options": { "values": ["High", "Medium", "Low"] } },
+    { "name": "requester", "type": "text", "required": true },
+    { "name": "amount", "type": "number", "required": true },
+    { "name": "sla", "type": "text", "required": true },
+    { "name": "status", "type": "select", "required": true, "options": { "values": ["Pending", "Queued", "Escalated"] } },
+    { "name": "preview", "type": "text", "required": false }
+  ],
+  "listRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "viewRule": "tenantId = @request.auth.tenantId || @request.auth.role = 'admin'",
+  "createRule": "@request.auth.role = 'admin'",
+  "updateRule": "@request.auth.role = 'admin'",
+  "deleteRule": "@request.auth.role = 'admin'"
+}

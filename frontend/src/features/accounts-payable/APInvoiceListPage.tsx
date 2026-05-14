@@ -8,7 +8,7 @@ import { FinancialTable } from '../../components/tables/FinancialTable'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchAPInvoices } from '../../lib/pocketbase'
+import { fetchAPInvoices, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate } from '../../lib/formatters'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 
@@ -22,7 +22,7 @@ export function APInvoiceListPage() {
   const [dueFilter, setDueFilter] = useState('')
 
   const query = useQuery({
-    queryKey: ['ap-invoices', tenantId, fiscalPeriod],
+    queryKey: makeQueryKey('ap-invoices', { tenantId, fiscalPeriod }),
     queryFn: () => fetchAPInvoices({ tenantId, fiscalPeriod }),
   })
 
@@ -118,7 +118,7 @@ export function APInvoiceListPage() {
         data={filtered}
         columns={columns}
         title="AP invoices"
-        subtitle={`Tenant ${tenantId} · ${fiscalPeriod}`}
+        subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         onRowClick={(row) => navigate(`/app/accounts-payable/${row.id}`)}
       />
     </Stack>

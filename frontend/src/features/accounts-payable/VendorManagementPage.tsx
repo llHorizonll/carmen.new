@@ -8,14 +8,14 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchVendors } from '../../lib/pocketbase'
+import { fetchVendors, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDateTime } from '../../lib/formatters'
 import { useDisclosure } from '@mantine/hooks'
 
 export function VendorManagementPage() {
   const tenantId = useAuthStore((state) => state.activeTenantId) ?? 'tenant-carmen'
   const fiscalPeriod = useTenantStore((state) => state.fiscalPeriod)
-  const query = useQuery({ queryKey: ['vendors', tenantId, fiscalPeriod], queryFn: () => fetchVendors({ tenantId, fiscalPeriod }) })
+  const query = useQuery({ queryKey: makeQueryKey('vendors', { tenantId, fiscalPeriod }), queryFn: () => fetchVendors({ tenantId, fiscalPeriod }) })
   const vendors = useMemo(() => query.data ?? [], [query.data])
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<(typeof vendors)[number] | null>(null)

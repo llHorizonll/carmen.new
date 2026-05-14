@@ -4,14 +4,14 @@ import { PremiumCard } from '../../components/ui/PremiumCard'
 import { useQuery } from '@tanstack/react-query'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchDashboardSnapshot } from '../../lib/pocketbase'
+import { fetchDashboardSnapshot, makeQueryKey } from '../../lib/pocketbase'
 import { formatCurrency, formatDateTime } from '../../lib/formatters'
 
 export function IncomeAuditPage() {
   const tenantId = useAuthStore((state) => state.activeTenantId) ?? 'tenant-carmen'
   const propertyId = useTenantStore((state) => state.selectedPropertyId) ?? 'prop-bkk'
   const fiscalPeriod = useTenantStore((state) => state.fiscalPeriod)
-  const query = useQuery({ queryKey: ['income-audit', tenantId, propertyId, fiscalPeriod], queryFn: () => fetchDashboardSnapshot({ tenantId, propertyId, fiscalPeriod }) })
+  const query = useQuery({ queryKey: makeQueryKey('income-audit', { tenantId, propertyId, fiscalPeriod }), queryFn: () => fetchDashboardSnapshot({ tenantId, propertyId, fiscalPeriod }) })
   const snapshot = query.data
 
   return (

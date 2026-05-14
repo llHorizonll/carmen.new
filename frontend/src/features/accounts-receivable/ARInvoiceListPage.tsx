@@ -9,7 +9,7 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchARInvoices } from '../../lib/pocketbase'
+import { fetchARInvoices, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate } from '../../lib/formatters'
 
 export function ARInvoiceListPage() {
@@ -21,7 +21,7 @@ export function ARInvoiceListPage() {
   const [customerFilter, setCustomerFilter] = useState('all')
   const [dueDate, setDueDate] = useState('')
 
-  const query = useQuery({ queryKey: ['ar-invoices', tenantId, fiscalPeriod], queryFn: () => fetchARInvoices({ tenantId, fiscalPeriod }) })
+  const query = useQuery({ queryKey: makeQueryKey('ar-invoices', { tenantId, fiscalPeriod }), queryFn: () => fetchARInvoices({ tenantId, fiscalPeriod }) })
   const invoices = useMemo(() => query.data ?? [], [query.data])
 
   const statuses = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.status))], [invoices])
@@ -91,7 +91,7 @@ export function ARInvoiceListPage() {
           </Grid.Col>
         ))}
       </Grid>
-      <FinancialTable data={filtered} columns={columns} title="AR invoices" subtitle={`Tenant ${tenantId} · ${fiscalPeriod}`} onRowClick={(row) => navigate(`/app/accounts-receivable/${row.id}`)} />
+      <FinancialTable data={filtered} columns={columns} title="AR invoices" subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`} onRowClick={(row) => navigate(`/app/accounts-receivable/${row.id}`)} />
     </Stack>
   )
 }

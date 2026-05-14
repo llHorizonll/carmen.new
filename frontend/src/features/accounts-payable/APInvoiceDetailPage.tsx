@@ -41,7 +41,7 @@ export function APInvoiceDetailPage() {
       <PageHeader
         badge={<Badge variant="light" color="yellow">AP Invoice Detail</Badge>}
         title={invoice?.invoiceNo ?? invoiceId}
-        subtitle={`${invoice?.vendor ?? ''} · ${invoice?.property ?? ''} · Due ${formatDate(invoice?.dueDate ?? new Date().toISOString())}`}
+        subtitle={`${invoice?.vendor ?? ''} | ${invoice?.property ?? ''} | Due ${formatDate(invoice?.dueDate ?? new Date().toISOString())}`}
         actions={<Group gap="xs"><Button>Approve</Button><Button variant="light">Reject</Button><Button variant="light">Payment history</Button></Group>}
       />
 

@@ -7,7 +7,7 @@ import { PremiumCard } from '../../components/ui/PremiumCard'
 import { FinancialTable } from '../../components/tables/FinancialTable'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchTrialBalance } from '../../lib/pocketbase'
+import { fetchTrialBalance, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount } from '../../lib/formatters'
 
 export function TrialBalanceReportPage() {
@@ -18,7 +18,7 @@ export function TrialBalanceReportPage() {
   const [accountRange, setAccountRange] = useState('')
 
   const query = useQuery({
-    queryKey: ['trial-balance', tenantId, fiscalPeriod, property, period, accountRange],
+    queryKey: makeQueryKey('trial-balance', { tenantId, propertyId: property === 'all' ? undefined : property, fiscalPeriod: period }),
     queryFn: () => fetchTrialBalance({ tenantId, fiscalPeriod }),
   })
 
@@ -77,7 +77,7 @@ export function TrialBalanceReportPage() {
         data={rows}
         columns={columns}
         title="Trial balance"
-        subtitle={`Tenant ${tenantId} · ${fiscalPeriod}`}
+        subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         footer={
           <Group justify="space-between">
             <Text size="sm" c="dimmed">Summary footer</Text>

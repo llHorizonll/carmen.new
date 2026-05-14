@@ -1,6 +1,6 @@
 import { Badge, Stack, Text } from '@mantine/core'
 import { PremiumCard } from '../../../components/ui/PremiumCard'
-import { formatDateTime, formatCurrency } from '../../../lib/formatters'
+import { formatCurrency, formatDateTime } from '../../../lib/formatters'
 
 export function RealtimeActivityFeed({
   items,
@@ -23,7 +23,7 @@ export function RealtimeActivityFeed({
               {item.detail}
             </Text>
             <Text size="xs" c="dimmed">
-              {formatDateTime(item.timestamp)} · {formatCurrency(item.amount)}
+              {formatDateTime(item.timestamp)} | {formatCurrency(item.amount)}
             </Text>
           </Stack>
         ))}
