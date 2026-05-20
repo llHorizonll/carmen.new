@@ -10,7 +10,7 @@ export function ApprovalQueuePage() {
 
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="yellow">Approvals</Badge>} title="Approval Queue" subtitle="Grouped queue for AP invoices, journal entries, payments, and adjustments." />
+      <PageHeader badge={<Badge variant="light" color="yellow">Approvals</Badge>} title="Approval Queue" subtitle="Prioritized approval worklist for AP invoices, journals, payment runs, and adjustments." />
       <Grid>
         <Grid.Col span={{ base: 12, xl: 8 }}>
           <Stack gap="sm">
@@ -32,7 +32,7 @@ export function ApprovalQueuePage() {
                     <Text fw={700}>{formatCompactAmount(item.amount)}</Text>
                     <Badge variant="light">{item.status}</Badge>
                     <Group gap="xs">
-                      <Button size="xs" onClick={() => setSelected(item)}>Preview</Button>
+                      <Button size="xs" onClick={() => setSelected(item)}>Open</Button>
                       <Button size="xs" variant="light">Approve</Button>
                       <Button size="xs" variant="light">Reject</Button>
                     </Group>
@@ -45,7 +45,7 @@ export function ApprovalQueuePage() {
         <Grid.Col span={{ base: 12, xl: 4 }}>
           <PremiumCard p="md">
             <Stack gap="sm">
-              <Text fw={700}>Side preview</Text>
+              <Text fw={700}>Approval details</Text>
               <Text size="sm" c="gray.4" fw={500}>{selected?.preview}</Text>
               <Text size="sm" c="gray.4" fw={500}>Requester {selected?.requester}</Text>
               <Text size="sm" c="gray.4" fw={500}>Group {selected?.group}</Text>

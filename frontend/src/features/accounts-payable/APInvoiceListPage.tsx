@@ -1,5 +1,5 @@
-import { Badge, Grid, Select, Stack, Text, TextInput } from '@mantine/core'
-import { useQuery } from '@tanstack/react-query'
+import { Badge, Button, Grid, Modal, NumberInput, Select, Stack, Text, TextInput } from '@mantine/core'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { MRT_ColumnDef } from 'mantine-react-table'
@@ -8,9 +8,10 @@ import { FinancialTable } from '../../components/tables/FinancialTable'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchAPInvoices, makeQueryKey } from '../../lib/pocketbase'
+import { createAPInvoice, fetchAPInvoices, makeQueryKey } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate } from '../../lib/formatters'
 import { PremiumCard } from '../../components/ui/PremiumCard'
+import { queryClient } from '../../lib/queryClient'
 
 export function APInvoiceListPage() {
   const navigate = useNavigate()
@@ -20,10 +21,46 @@ export function APInvoiceListPage() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [propertyFilter, setPropertyFilter] = useState('all')
   const [dueFilter, setDueFilter] = useState('')
+  const [createOpen, setCreateOpen] = useState(false)
+  const [form, setForm] = useState({
+    invoiceNo: '',
+    vendorId: 'vend-1',
+    propertyId: 'prop-bkk',
+    invoiceDate: '',
+    dueDate: '',
+    amount: 0,
+    balance: 0,
+    status: 'Pending Approval' as const,
+    approval: 'Manager',
+    aging: 'Current',
+  })
 
   const query = useQuery({
     queryKey: makeQueryKey('ap-invoices', { tenantId, fiscalPeriod }),
     queryFn: () => fetchAPInvoices({ tenantId, fiscalPeriod }),
+  })
+  const createMutation = useMutation({
+    mutationFn: () =>
+      createAPInvoice({
+        tenantId,
+        ...form,
+      }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['ap-invoices'] })
+      setCreateOpen(false)
+      setForm({
+        invoiceNo: '',
+        vendorId: 'vend-1',
+        propertyId: 'prop-bkk',
+        invoiceDate: '',
+        dueDate: '',
+        amount: 0,
+        balance: 0,
+        status: 'Pending Approval',
+        approval: 'Manager',
+        aging: 'Current',
+      })
+    },
   })
 
   const invoices = useMemo(() => query.data ?? [], [query.data])
@@ -76,21 +113,22 @@ export function APInvoiceListPage() {
       <PageHeader
         badge={<Badge variant="light" color="teal">Accounts Payable</Badge>}
         title="AP Invoice List"
-        subtitle="Compact invoice control with filters, aging, and approval signals."
+        subtitle="Invoice register with due-date filters, approval status, and payment-run visibility."
+        actions={<Button onClick={() => setCreateOpen(true)}>New AP Invoice</Button>}
       />
 
       <Grid>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <TextInput label="Due date" type="date" value={dueFilter} onChange={(event) => setDueFilter(event.currentTarget.value)} />
+          <TextInput label="Due Date" type="date" value={dueFilter} onChange={(event) => setDueFilter(event.currentTarget.value)} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <Select label="Vendor" data={vendors} value={vendorFilter} onChange={(value) => setVendorFilter(value ?? 'all')} />
+          <Select label="Vendor" data={vendors} value={vendorFilter} onChange={(value) => setVendorFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <Select label="Property" data={properties} value={propertyFilter} onChange={(value) => setPropertyFilter(value ?? 'all')} />
+          <Select label="Property" data={properties} value={propertyFilter} onChange={(value) => setPropertyFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <Select label="Status" data={statuses} value={statusFilter} onChange={(value) => setStatusFilter(value ?? 'all')} />
+          <Select label="Status" data={statuses} value={statusFilter} onChange={(value) => setStatusFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
       </Grid>
 
@@ -117,10 +155,22 @@ export function APInvoiceListPage() {
       <FinancialTable
         data={filtered}
         columns={columns}
-        title="AP invoices"
+        title="AP Invoices"
         subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         onRowClick={(row) => navigate(`/app/accounts-payable/${row.id}`)}
       />
+      <Modal opened={createOpen} onClose={() => setCreateOpen(false)} title="Create AP Invoice">
+        <Stack gap="sm">
+          <TextInput label="Invoice Number" description="Vendor invoice reference number." value={form.invoiceNo} onChange={(event) => setForm((prev) => ({ ...prev, invoiceNo: event.currentTarget.value }))} size="xs" />
+          <Select label="Vendor" data={[{ value: 'vend-1', label: 'Siam Fresh Produce' }, { value: 'vend-2', label: 'Andaman Seafood Supply' }, { value: 'vend-3', label: 'Bangkok Linen Services' }, { value: 'vend-4', label: 'Thai Beverage Distribution' }, { value: 'vend-5', label: 'Premier Maintenance Co.' }]} value={form.vendorId} onChange={(value) => setForm((prev) => ({ ...prev, vendorId: value ?? 'vend-1' }))} size="xs" />
+          <Select label="Property" data={[{ value: 'prop-bkk', label: 'CARMEN Bangkok Riverside' }, { value: 'prop-phuket', label: 'CARMEN Phuket Resort' }, { value: 'prop-chiangmai', label: 'CARMEN Chiang Mai Boutique' }, { value: 'prop-pattaya', label: 'CARMEN Pattaya Beach' }]} value={form.propertyId} onChange={(value) => setForm((prev) => ({ ...prev, propertyId: value ?? 'prop-bkk' }))} size="xs" />
+          <TextInput label="Invoice Date" type="date" value={form.invoiceDate} onChange={(event) => setForm((prev) => ({ ...prev, invoiceDate: event.currentTarget.value }))} size="xs" />
+          <TextInput label="Due Date" type="date" value={form.dueDate} onChange={(event) => setForm((prev) => ({ ...prev, dueDate: event.currentTarget.value }))} size="xs" />
+          <NumberInput label="Amount" description="Gross amount to be approved and paid." thousandSeparator="," decimalScale={2} fixedDecimalScale min={0} value={form.amount} onChange={(value) => setForm((prev) => ({ ...prev, amount: Number(value ?? 0), balance: Number(value ?? 0) }))} size="xs" />
+          <Select label="Status" data={['Pending Approval', 'Approved', 'Paid', 'Overdue']} value={form.status} onChange={(value) => setForm((prev) => ({ ...prev, status: (value ?? 'Pending Approval') as typeof form.status }))} size="xs" />
+          <Button onClick={() => createMutation.mutate()} loading={createMutation.isPending}>Save Invoice</Button>
+        </Stack>
+      </Modal>
     </Stack>
   )
 }

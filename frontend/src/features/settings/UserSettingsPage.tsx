@@ -18,8 +18,8 @@ export function UserSettingsPage() {
           <PremiumCard p="md">
             <Stack gap="sm">
               <Text fw={700}>Profile settings</Text>
-              <TextInput label="Full name" placeholder="Maya Srisuk" />
-              <TextInput label="Email" placeholder="maya.finance@carmen.cloud" />
+              <TextInput label="Full Name" placeholder="Maya Srisuk" size="xs" />
+              <TextInput label="Email" placeholder="maya.finance@carmen.cloud" size="xs" />
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -33,7 +33,7 @@ export function UserSettingsPage() {
                 </Text>
                 <Switch checked={colorScheme === 'dark'} onChange={toggleColorScheme} />
               </Group>
-              <Select label="Default fiscal period" data={['FY2026 P04', 'FY2026 P05', 'FY2026 P06']} value={fiscalPeriod} onChange={(value) => value && setFiscalPeriod(value)} />
+              <Select label="Default Fiscal Period" data={['FY2026 P04', 'FY2026 P05', 'FY2026 P06']} value={fiscalPeriod} onChange={(value) => value && setFiscalPeriod(value)} size="xs" />
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -67,7 +67,7 @@ export function UserSettingsPage() {
             <Stack gap="sm">
               <Text fw={700}>Keyboard shortcuts</Text>
               <Text size="sm" c="gray.4" fw={500}>
-                Ctrl/Cmd + K | command menu
+                Ctrl/Cmd + K | open search
               </Text>
               <Text size="sm" c="gray.4" fw={500}>
                 N | new journal entry
@@ -96,7 +96,7 @@ export function UserSettingsPage() {
             <Stack gap="sm">
               <Text fw={700}>Session list</Text>
               <Text size="sm" c="gray.4" fw={500}>
-                Placeholder for current and recent sessions.
+                Current and recent sign-in sessions appear here.
               </Text>
             </Stack>
           </PremiumCard>

@@ -103,7 +103,7 @@ export function DashboardPage() {
               </Text>
             </Box>
             <Stack gap={4} align="flex-end">
-              <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Synced ${formatDateTime(lastSyncAt)}` : 'Waiting for sync'} />
+              <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Waiting for sync'} />
               <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
                 Property {selectedPropertyId}
               </Text>
@@ -197,7 +197,7 @@ export function DashboardPage() {
             footer={
               <Group justify="space-between">
                 <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
-                  Summary row
+                  Totals
                 </Text>
                 <Group gap="md">
                   <Text size="sm">Debit {formatCurrency(snapshot?.recentJournals.reduce((sum, item) => sum + item.debit, 0) ?? 0)}</Text>

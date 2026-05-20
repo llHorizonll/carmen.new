@@ -1,6 +1,6 @@
-import { Badge, Grid, Group, Select, Stack, Text, TextInput } from '@mantine/core'
+import { Badge, Button, Grid, Group, Modal, NumberInput, Select, Stack, Text, TextInput } from '@mantine/core'
 import { IconKeyboard } from '@tabler/icons-react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { MRT_ColumnDef } from 'mantine-react-table'
@@ -9,8 +9,9 @@ import { FinancialTable } from '../../components/tables/FinancialTable'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchJournalEntries, makeQueryKey } from '../../lib/pocketbase'
+import { fetchJournalEntries, makeQueryKey, saveJournalDraft } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDateTime } from '../../lib/formatters'
+import { queryClient } from '../../lib/queryClient'
 
 export function JournalEntryListPage() {
   const navigate = useNavigate()
@@ -21,10 +22,49 @@ export function JournalEntryListPage() {
   const [sourceFilter, setSourceFilter] = useState<string>('all')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [createOpen, setCreateOpen] = useState(false)
+  const [draftForm, setDraftForm] = useState({
+    jeNumber: '',
+    date: '',
+    source: 'Manual',
+    description: '',
+    propertyId: 'prop-bkk',
+    debit: 0,
+    credit: 0,
+  })
 
   const query = useQuery({
     queryKey: makeQueryKey('journal-entries', { tenantId, fiscalPeriod }),
     queryFn: () => fetchJournalEntries({ tenantId, fiscalPeriod }),
+  })
+  const draftMutation = useMutation({
+    mutationFn: () =>
+      saveJournalDraft({
+        tenantId,
+        propertyId: draftForm.propertyId,
+        jeNumber: draftForm.jeNumber,
+        date: draftForm.date,
+        source: draftForm.source,
+        description: draftForm.description,
+        status: 'Draft',
+        lines: [
+          { accountCode: '10000', accountName: 'Cash on Hand', department: 'Finance', debit: draftForm.debit, credit: 0, memo: 'Draft debit' },
+          { accountCode: '20000', accountName: 'Accounts Payable', department: 'Finance', debit: 0, credit: draftForm.credit, memo: 'Draft credit' },
+        ],
+      }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['journal-entries'] })
+      setCreateOpen(false)
+      setDraftForm({
+        jeNumber: '',
+        date: '',
+        source: 'Manual',
+        description: '',
+        propertyId: 'prop-bkk',
+        debit: 0,
+        credit: 0,
+      })
+    },
   })
 
   const entries = useMemo(() => query.data ?? [], [query.data])
@@ -91,37 +131,37 @@ export function JournalEntryListPage() {
         badge={<Badge variant="light" color="gray">General Ledger</Badge>}
         title="Journal Entry List"
         subtitle="Dense operational journal control with filters, sticky headers, and finance-friendly amounts."
-        actions={<Group gap="xs"><IconKeyboard size={14} /><Text size="sm" c="gray.4" fw={500}>N = New Entry</Text></Group>}
+        actions={<Group gap="xs"><IconKeyboard size={14} /><Text size="sm" c="gray.4" fw={500}>N = New Entry</Text><Button onClick={() => setCreateOpen(true)}>New Entry</Button></Group>}
       />
 
       <Grid>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <TextInput label="Start date" type="date" value={startDate} onChange={(event) => setStartDate(event.currentTarget.value)} />
+          <TextInput label="Start Date" type="date" value={startDate} onChange={(event) => setStartDate(event.currentTarget.value)} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}>
-          <TextInput label="End date" type="date" value={endDate} onChange={(event) => setEndDate(event.currentTarget.value)} />
+          <TextInput label="End Date" type="date" value={endDate} onChange={(event) => setEndDate(event.currentTarget.value)} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 2 }}>
-          <Select label="Property" data={properties} value={propertyFilter} onChange={(value) => setPropertyFilter(value ?? 'all')} />
+          <Select label="Property" data={properties} value={propertyFilter} onChange={(value) => setPropertyFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 2 }}>
-          <Select label="Status" data={statuses} value={statusFilter} onChange={(value) => setStatusFilter(value ?? 'all')} />
+          <Select label="Status" data={statuses} value={statusFilter} onChange={(value) => setStatusFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 2 }}>
-          <Select label="Source" data={sources} value={sourceFilter} onChange={(value) => setSourceFilter(value ?? 'all')} />
+          <Select label="Source" data={sources} value={sourceFilter} onChange={(value) => setSourceFilter(value ?? 'all')} size="xs" />
         </Grid.Col>
       </Grid>
 
       <FinancialTable
         data={filtered}
         columns={columns}
-        title="Journal entries"
+        title="Journal Entries"
         subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         onRowClick={(row) => navigate(`/app/general-ledger/${row.id}`)}
         footer={
           <Group justify="space-between">
               <Text size="sm" c="gray.4" fw={500}>
-              Summary row
+              Totals
             </Text>
             <Group gap="lg">
               <Text size="sm">Debit {formatCompactAmount(filtered.reduce((sum, row) => sum + row.debit, 0))}</Text>
@@ -130,6 +170,18 @@ export function JournalEntryListPage() {
           </Group>
         }
       />
+      <Modal opened={createOpen} onClose={() => setCreateOpen(false)} title="Create Journal Draft">
+        <Stack gap="sm">
+          <TextInput label="JE Number" description="Unique journal reference number." value={draftForm.jeNumber} onChange={(event) => setDraftForm((prev) => ({ ...prev, jeNumber: event.currentTarget.value }))} size="xs" />
+          <TextInput label="Date" type="date" value={draftForm.date} onChange={(event) => setDraftForm((prev) => ({ ...prev, date: event.currentTarget.value }))} size="xs" />
+          <Select label="Property" data={[{ value: 'prop-bkk', label: 'Bangkok Riverside' }, { value: 'prop-phuket', label: 'Phuket Resort' }, { value: 'prop-chiangmai', label: 'Chiang Mai Boutique' }, { value: 'prop-pattaya', label: 'Pattaya Beach' }]} value={draftForm.propertyId} onChange={(value) => setDraftForm((prev) => ({ ...prev, propertyId: value ?? 'prop-bkk' }))} size="xs" />
+          <TextInput label="Source" value={draftForm.source} onChange={(event) => setDraftForm((prev) => ({ ...prev, source: event.currentTarget.value }))} size="xs" />
+          <TextInput label="Description" value={draftForm.description} onChange={(event) => setDraftForm((prev) => ({ ...prev, description: event.currentTarget.value }))} size="xs" />
+          <NumberInput label="Debit Amount" description="Total debit for the draft entry." thousandSeparator="," decimalScale={2} fixedDecimalScale min={0} value={draftForm.debit} onChange={(value) => setDraftForm((prev) => ({ ...prev, debit: Number(value ?? 0) }))} size="xs" />
+          <NumberInput label="Credit Amount" description="Total credit for the draft entry." thousandSeparator="," decimalScale={2} fixedDecimalScale min={0} value={draftForm.credit} onChange={(value) => setDraftForm((prev) => ({ ...prev, credit: Number(value ?? 0) }))} size="xs" />
+          <Button onClick={() => draftMutation.mutate()} loading={draftMutation.isPending}>Save Draft</Button>
+        </Stack>
+      </Modal>
     </Stack>
   )
 }

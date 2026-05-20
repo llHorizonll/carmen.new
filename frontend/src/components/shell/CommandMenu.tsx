@@ -34,31 +34,37 @@ export function CommandMenu() {
   )
 
   return (
-    <Modal opened={open} onClose={() => setOpen(false)} title="Command menu" size="md" centered overlayProps={{ blur: 4 }}>
+    <Modal opened={open} onClose={() => setOpen(false)} title="Search and Navigate" size="md" centered overlayProps={{ blur: 4 }}>
       <Stack gap="md">
         <Text size="sm" c="dimmed">
           Search finance workflows, pages, and actions.
         </Text>
         <TextInput
-          placeholder="Type to search..."
+          label="Search"
+          placeholder="Type a page or workflow..."
           leftSection={<IconSearch size={14} />}
           value={search}
           onChange={(event) => setSearch(event.currentTarget.value)}
+          size="xs"
           autoFocus
         />
         <Stack gap={4}>
-          {filtered.map((command) => (
-            <UnstyledButton
-              key={command.path}
-              onClick={() => {
-                navigate(command.path)
-                setOpen(false)
-              }}
-              className="command-item"
-            >
-              <Text fw={600}>{command.label}</Text>
-            </UnstyledButton>
-          ))}
+          {filtered.length > 0 ? (
+            filtered.map((command) => (
+              <UnstyledButton
+                key={command.path}
+                onClick={() => {
+                  navigate(command.path)
+                  setOpen(false)
+                }}
+                className="command-item"
+              >
+                <Text fw={600}>{command.label}</Text>
+              </UnstyledButton>
+            ))
+          ) : (
+            <Text size="sm" c="dimmed">No matching pages or actions.</Text>
+          )}
         </Stack>
       </Stack>
     </Modal>

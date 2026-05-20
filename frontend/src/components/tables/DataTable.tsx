@@ -71,7 +71,7 @@ export function DataTable<TData extends Record<string, unknown>>({
             ) : null}
           </Box>
           <Group gap="sm" wrap="wrap">
-            <TextInput placeholder="Search" value={search} onChange={(event) => setSearch(event.currentTarget.value)} size="xs" />
+            <TextInput label="Global Search" placeholder="Search rows..." value={search} onChange={(event) => setSearch(event.currentTarget.value)} size="xs" />
             {toolbarActions ? <Box>{toolbarActions}</Box> : null}
           </Group>
         </Group>
@@ -121,7 +121,7 @@ export function DataTable<TData extends Record<string, unknown>>({
 
         <Group justify="space-between" mt="sm" wrap="wrap">
           <Text size="sm" c="dimmed">
-            {filteredData.length} records
+            {filteredData.length} rows
           </Text>
           <Pagination value={safePage} onChange={setPage} total={pageCount} />
         </Group>

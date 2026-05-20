@@ -44,12 +44,12 @@ export function AuditLogsPage() {
 
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="gray">Audit Logs</Badge>} title="Audit Logs" subtitle="Dense, filterable audit trail with timeline detail drawer." />
+      <PageHeader badge={<Badge variant="light" color="gray">Audit Logs</Badge>} title="Audit Logs" subtitle="Dense, filterable audit trail with a timeline detail panel." />
       <Grid>
-        <Grid.Col span={{ base: 12, md: 3 }}><Select label="User" data={users} value={userFilter} onChange={(value) => setUserFilter(value ?? 'all')} /></Grid.Col>
-        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Module" data={modules} value={moduleFilter} onChange={(value) => setModuleFilter(value ?? 'all')} /></Grid.Col>
-        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Action" data={actions} value={actionFilter} onChange={(value) => setActionFilter(value ?? 'all')} /></Grid.Col>
-        <Grid.Col span={{ base: 12, md: 3 }}><TextInput label="Date" type="date" value={dateFilter} onChange={(event) => setDateFilter(event.currentTarget.value)} /></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 3 }}><Select label="User" data={users} value={userFilter} onChange={(value) => setUserFilter(value ?? 'all')} size="xs" /></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Module" data={modules} value={moduleFilter} onChange={(value) => setModuleFilter(value ?? 'all')} size="xs" /></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Action" data={actions} value={actionFilter} onChange={(value) => setActionFilter(value ?? 'all')} size="xs" /></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 3 }}><TextInput label="Date" type="date" value={dateFilter} onChange={(event) => setDateFilter(event.currentTarget.value)} size="xs" /></Grid.Col>
       </Grid>
       <Grid>
         <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Success</Text><Text fw={700}>{auditLogs.filter((log) => log.status === 'Success').length}</Text></PremiumCard></Grid.Col>
@@ -58,7 +58,7 @@ export function AuditLogsPage() {
         <Grid.Col span={{ base: 12, sm: 6, xl: 3 }}><PremiumCard p="md"><Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Rows</Text><Text fw={700}>{filtered.length}</Text></PremiumCard></Grid.Col>
       </Grid>
       <FinancialTable data={filtered} columns={columns} title="Audit entries" onRowClick={(row) => { setSelected(row); openDrawer(); }} />
-      <Drawer opened={open} onClose={close} position="right" title="Audit detail" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="Audit details" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.action}</Text>
           <Text size="sm" c="gray.4" fw={500}>{selected?.detail}</Text>

@@ -11,6 +11,7 @@ import { APInvoiceListPage } from '../features/accounts-payable/APInvoiceListPag
 import { APInvoiceDetailPage } from '../features/accounts-payable/APInvoiceDetailPage'
 import { VendorManagementPage } from '../features/accounts-payable/VendorManagementPage'
 import { ARInvoiceListPage } from '../features/accounts-receivable/ARInvoiceListPage'
+import { ARInvoiceDetailPage } from '../features/accounts-receivable/ARInvoiceDetailPage'
 import { CustomerManagementPage } from '../features/accounts-receivable/CustomerManagementPage'
 import { IncomeAuditPage } from '../features/income-audit/IncomeAuditPage'
 import { TrialBalanceReportPage } from '../features/reports/TrialBalanceReportPage'
@@ -69,7 +70,8 @@ export const router = createBrowserRouter([
       { path: 'accounts-payable/:id', element: <APInvoiceDetailPage /> },
       { path: 'vendors', element: <VendorManagementPage /> },
       { path: 'accounts-receivable', element: <ARInvoiceListPage /> },
-      { path: 'accounts-receivable/:id', element: <CustomerManagementPage /> },
+      { path: 'accounts-receivable/:id', element: <ARInvoiceDetailPage /> },
+      { path: 'customers', element: <CustomerManagementPage /> },
       { path: 'income-audit', element: <IncomeAuditPage /> },
       { path: 'trial-balance', element: <TrialBalanceReportPage /> },
       { path: 'approvals', element: <ApprovalQueuePage /> },

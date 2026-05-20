@@ -50,8 +50,8 @@ export function LoginPage() {
           </div>
           <form onSubmit={onSubmit}>
             <Stack gap="sm">
-              <TextInput label="Email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} placeholder="finance@hotelgroup.com" required />
-              <PasswordInput label="Password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} placeholder="********" required />
+              <TextInput label="Email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} placeholder="finance@hotelgroup.com" required size="xs" />
+              <PasswordInput label="Password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} placeholder="********" required size="xs" />
               <Text size="xs" c="rgba(255,255,255,.76)" fw={500}>
                 {loginHint}
               </Text>

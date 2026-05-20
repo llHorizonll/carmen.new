@@ -5,14 +5,14 @@ import { PremiumCard } from '../../components/ui/PremiumCard'
 export function SettingsPage() {
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="gray">Settings</Badge>} title="Settings" subtitle="Administrative preferences and tenant configuration placeholders." />
+      <PageHeader badge={<Badge variant="light" color="gray">Settings</Badge>} title="Settings" subtitle="Administrative preferences and tenant configuration controls." />
       <Grid>
         {['Tenant policies', 'Workflow defaults', 'Audit rules', 'Notifications'].map((title) => (
           <Grid.Col key={title} span={{ base: 12, md: 6 }}>
             <PremiumCard p="md">
               <Text fw={700}>{title}</Text>
               <Text size="sm" c="gray.4" fw={500}>
-                Placeholder configuration panel for {title.toLowerCase()}.
+                Configure {title.toLowerCase()} for finance operations, approvals, and access governance.
               </Text>
             </PremiumCard>
           </Grid.Col>

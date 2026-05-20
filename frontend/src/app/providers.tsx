@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { MantineProvider } from '@mantine/core'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { queryClient } from '../lib/queryClient'
 import { fetchNotificationsForTenant, hydratePocketBaseSession } from '../lib/pocketbase'
 import { theme } from '../styles/theme'
@@ -19,7 +19,7 @@ function RealtimeBridge() {
   const seedNotifications = useNotificationStore((state) => state.seedNotifications)
   const setConnectionStatus = useNotificationStore((state) => state.setConnectionStatus)
   const setLastSyncAt = useNotificationStore((state) => state.setLastSyncAt)
-  const invalidate = queryClient.invalidateQueries.bind(queryClient)
+  const lastEventKeyRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (!isAuthenticated || !activeTenantId) {
@@ -28,9 +28,15 @@ function RealtimeBridge() {
 
     const stop = startMockRealtime({
       onEvent(event) {
+        const eventKey = `${event.type}:${event.title}:${event.message}:${event.timestamp}`
+        if (lastEventKeyRef.current === eventKey) {
+          return
+        }
+
+        lastEventKeyRef.current = eventKey
         pushNotification(event)
         setLastSyncAt(event.timestamp)
-        void invalidate()
+        void queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       },
       onStatus(status) {
         setConnectionStatus(status)
@@ -38,7 +44,7 @@ function RealtimeBridge() {
     })
 
     return () => stop()
-  }, [activeTenantId, invalidate, isAuthenticated, pushNotification, setConnectionStatus, setLastSyncAt])
+  }, [activeTenantId, isAuthenticated, pushNotification, setConnectionStatus, setLastSyncAt])
 
   useEffect(() => {
     if (!isAuthenticated || !activeTenantId) {

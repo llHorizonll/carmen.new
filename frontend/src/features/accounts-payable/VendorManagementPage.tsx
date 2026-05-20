@@ -1,6 +1,6 @@
-import { Badge, Drawer, Grid, Stack, Text, TextInput } from '@mantine/core'
+import { Badge, Button, Drawer, Grid, Group, Modal, NumberInput, Select, Stack, Text, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import type { MRT_ColumnDef } from 'mantine-react-table'
 import { PageHeader } from '../../components/ui/PageHeader'
@@ -9,17 +9,59 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 import { useAuthStore } from '../auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
-import { fetchVendors, makeQueryKey } from '../../lib/pocketbase'
+import { createVendor, deleteVendor, fetchVendors, makeQueryKey, updateVendor, type VendorMutationInput } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDateTime } from '../../lib/formatters'
+import { queryClient } from '../../lib/queryClient'
+
+const emptyForm: Omit<VendorMutationInput, 'tenantId'> = {
+  code: '',
+  name: '',
+  category: 'F&B',
+  taxId: '',
+  balance: 0,
+  paymentTerms: 'Net 30',
+  status: 'Active',
+  risk: 'Low',
+}
 
 export function VendorManagementPage() {
   const tenantId = useAuthStore((state) => state.activeTenantId) ?? 'tenant-carmen'
   const fiscalPeriod = useTenantStore((state) => state.fiscalPeriod)
-  const query = useQuery({ queryKey: makeQueryKey('vendors', { tenantId, fiscalPeriod }), queryFn: () => fetchVendors({ tenantId, fiscalPeriod }) })
+  const queryKey = makeQueryKey('vendors', { tenantId, fiscalPeriod })
+  const query = useQuery({ queryKey, queryFn: () => fetchVendors({ tenantId, fiscalPeriod }) })
   const vendors = useMemo(() => query.data ?? [], [query.data])
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<(typeof vendors)[number] | null>(null)
+  const [formMode, setFormMode] = useState<'create' | 'edit'>('create')
+  const [form, setForm] = useState(emptyForm)
   const [open, { open: openDrawer, close }] = useDisclosure(false)
+  const [formOpen, { open: openForm, close: closeForm }] = useDisclosure(false)
+
+  const createMutation = useMutation({
+    mutationFn: (payload: VendorMutationInput) => createVendor(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['vendors'] })
+      closeForm()
+      setForm(emptyForm)
+    },
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: VendorMutationInput }) => updateVendor(id, payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['vendors'] })
+      closeForm()
+      setForm(emptyForm)
+    },
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteVendor(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['vendors'] })
+      close()
+    },
+  })
 
   const filtered = useMemo(
     () => vendors.filter((vendor) => vendor.name.toLowerCase().includes(search.toLowerCase()) || vendor.code.toLowerCase().includes(search.toLowerCase())),
@@ -50,10 +92,64 @@ export function VendorManagementPage() {
     [],
   )
 
+  const openCreate = () => {
+    setFormMode('create')
+    setForm(emptyForm)
+    openForm()
+  }
+
+  const openEdit = () => {
+    if (!selected) {
+      return
+    }
+
+    setFormMode('edit')
+    setForm({
+      code: selected.code,
+      name: selected.name,
+      category: selected.category,
+      taxId: selected.taxId,
+      balance: selected.balance,
+      paymentTerms: selected.paymentTerms,
+      status: selected.status,
+      risk: selected.risk,
+    })
+    openForm()
+  }
+
+  const submitForm = async () => {
+    const payload: VendorMutationInput = {
+      tenantId,
+      ...form,
+      risk: form.risk ?? 'Low',
+      taxId: form.taxId ?? '',
+    }
+
+    if (formMode === 'create') {
+      await createMutation.mutateAsync(payload)
+      return
+    }
+
+    if (selected) {
+      await updateMutation.mutateAsync({ id: selected.id, payload })
+    }
+  }
+
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="teal">Vendor Management</Badge>} title="Vendor Management" subtitle="Searchable vendor register with risk and payment context." />
-      <TextInput label="Search vendor" value={search} onChange={(event) => setSearch(event.currentTarget.value)} />
+      <PageHeader
+        badge={<Badge variant="light" color="teal">Vendor Management</Badge>}
+        title="Vendor Management"
+        subtitle="Searchable vendor register with risk and payment context."
+        actions={<Button onClick={openCreate}>New Vendor</Button>}
+      />
+      <TextInput
+        label="Search Vendor"
+        placeholder="Vendor code or vendor name"
+        value={search}
+        onChange={(event) => setSearch(event.currentTarget.value)}
+        size="xs"
+      />
       <Grid>
         {[
           ['Low risk', vendors.filter((vendor) => vendor.risk === 'Low').length],
@@ -81,7 +177,7 @@ export function VendorManagementPage() {
           openDrawer()
         }}
       />
-      <Drawer opened={open} onClose={close} position="right" title="Vendor detail" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="Vendor summary" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="gray.4" fw={500}>
@@ -97,8 +193,29 @@ export function VendorManagementPage() {
           <Text size="sm" c="gray.4" fw={500}>
             Last activity {formatDateTime(selected?.lastActivity ?? new Date().toISOString())}
           </Text>
+          <Group grow>
+            <Button variant="light" onClick={openEdit}>Edit</Button>
+            <Button color="red" variant="light" onClick={() => selected && deleteMutation.mutate(selected.id)} loading={deleteMutation.isPending}>Delete</Button>
+          </Group>
         </Stack>
       </Drawer>
+
+      <Modal opened={formOpen} onClose={closeForm} title={formMode === 'create' ? 'Create Vendor' : 'Edit Vendor'}>
+        <Stack gap="sm">
+          <TextInput label="Vendor Code" value={form.code} onChange={(event) => setForm((prev) => ({ ...prev, code: event.currentTarget.value }))} required size="xs" />
+          <TextInput label="Vendor Name" value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.currentTarget.value }))} required size="xs" />
+          <TextInput label="Category" value={form.category} onChange={(event) => setForm((prev) => ({ ...prev, category: event.currentTarget.value }))} required size="xs" />
+          <TextInput label="Tax ID" value={form.taxId ?? ''} onChange={(event) => setForm((prev) => ({ ...prev, taxId: event.currentTarget.value }))} size="xs" />
+          <NumberInput label="Balance" min={0} value={form.balance} onChange={(value) => setForm((prev) => ({ ...prev, balance: Number(value ?? 0) }))} required thousandSeparator="," decimalScale={2} fixedDecimalScale size="xs" />
+          <TextInput label="Payment Terms" value={form.paymentTerms} onChange={(event) => setForm((prev) => ({ ...prev, paymentTerms: event.currentTarget.value }))} required size="xs" />
+          <Select label="Status" data={['Active', 'Review', 'Hold']} value={form.status} onChange={(value) => setForm((prev) => ({ ...prev, status: (value ?? 'Active') as VendorMutationInput['status'] }))} size="xs" />
+          <Select label="Risk" data={['Low', 'Medium', 'High']} value={form.risk} onChange={(value) => setForm((prev) => ({ ...prev, risk: (value ?? 'Low') as VendorMutationInput['risk'] }))} size="xs" />
+          <Group justify="flex-end">
+            <Button variant="light" onClick={closeForm}>Cancel</Button>
+            <Button onClick={submitForm} loading={createMutation.isPending || updateMutation.isPending}>{formMode === 'create' ? 'Create' : 'Save'}</Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Stack>
   )
 }

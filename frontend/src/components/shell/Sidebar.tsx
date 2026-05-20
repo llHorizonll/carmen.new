@@ -35,6 +35,7 @@ const groups = [
       { to: '/app/general-ledger', label: 'General Ledger', icon: IconBook2 },
       { to: '/app/accounts-payable', label: 'Accounts Payable', icon: IconReceipt2 },
       { to: '/app/accounts-receivable', label: 'Accounts Receivable', icon: IconFiles },
+      { to: '/app/customers', label: 'Customers', icon: IconUsersGroup },
       { to: '/app/income-audit', label: 'Income Audit', icon: IconTimeline },
       { to: '/app/trial-balance', label: 'Trial Balance', icon: IconFileAnalytics },
       { to: '/app/approvals', label: 'Approvals', icon: IconClipboardCheck },
@@ -99,7 +100,7 @@ export function Sidebar() {
             {session?.user.email}
           </Text>
           <TenantSwitcher />
-          <LiveIndicator status={connectionStatus} label={`Live sync | ${unreadCount} alerts`} />
+          <LiveIndicator status={connectionStatus} label={`Live sync | ${unreadCount} unread`} />
         </Stack>
       ) : null}
 

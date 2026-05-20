@@ -113,14 +113,32 @@ select {
     linear-gradient(180deg, rgba(11, 18, 32, 0.98), rgba(9, 12, 16, 1));
 }
 
+.shell-topbar-inner {
+  min-height: 56px;
+  padding: 0.45rem 0.9rem 0.45rem 0.8rem;
+}
+
+.shell-breadcrumbs {
+  min-width: 0;
+}
+
+.shell-topbar-actions {
+  gap: 0.35rem;
+  padding-right: 0.4rem;
+}
+
+.shell-topbar-actions > * {
+  flex-shrink: 0;
+}
+
 .shell-sidebar-inner {
   height: 100%;
-  padding: 1rem 0.75rem;
+  padding: 0.85rem 0.65rem;
 }
 
 .sidebar-meta,
 .sidebar-footer {
-  padding: 0.75rem;
+  padding: 0.65rem;
   border-radius: 16px;
   background: rgba(15, 23, 42, 0.72);
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -139,8 +157,8 @@ select {
 }
 
 .shell-nav-link {
-  border-radius: 12px;
-  margin: 0 0.25rem;
+  border-radius: 10px;
+  margin: 0 0.2rem;
   color: #d7dee9;
 }
 
@@ -155,6 +173,78 @@ select {
   border-radius: 12px;
   border: 1px solid rgba(148, 163, 184, 0.16);
   background: rgba(15, 23, 42, 0.74);
+}
+
+.tenant-switcher-button.sidebar {
+  min-height: 52px;
+  padding: 0.5rem 0.75rem;
+  align-items: flex-start;
+}
+
+.tenant-switcher-button.sidebar .mantine-Button-inner {
+  align-items: flex-start;
+}
+
+.tenant-switcher-button.sidebar .mantine-Button-label {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.tenant-switcher-button.sidebar .mantine-Button-section[data-position='right'] {
+  align-self: center;
+  margin-inline-start: 0.45rem;
+}
+
+.tenant-switcher-button.sidebar .ui-label {
+  margin-bottom: 0.1rem;
+}
+
+.tenant-switcher-button.compact {
+  width: 248px;
+  min-height: 32px;
+  padding: 0.32rem 0.7rem;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.tenant-switcher-button.compact .mantine-Button-label {
+  width: 100%;
+}
+
+.tenant-switcher-button.compact .mantine-Button-section[data-position='right'] {
+  margin-inline-start: 0.35rem;
+}
+
+.tenant-switcher-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.topbar-select .mantine-Input-input,
+.topbar-select .mantine-Select-input {
+  min-height: 32px;
+  height: 32px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.74);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.topbar-select-period .mantine-Input-input,
+.topbar-select-period .mantine-Select-input {
+  font-size: 12px;
+}
+
+.topbar-select-property .mantine-Input-input,
+.topbar-select-property .mantine-Select-input {
+  font-size: 12px;
+}
+
+.topbar-user-button {
+  margin-right: 0.3rem;
+  padding-inline: 0.45rem;
 }
 
 .premium-card {
@@ -186,13 +276,13 @@ select {
 }
 
 .dashboard-hero {
-  padding: 1rem;
+  padding: 1.15rem 1rem 1rem;
   border-radius: 20px;
 }
 
 .dashboard-hero .page-title {
   font-size: clamp(1.6rem, 2vw, 2.3rem);
-  line-height: 1.05;
+  line-height: 1.12;
 }
 
 .dashboard-metrics {
@@ -215,6 +305,10 @@ select {
   border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
+.page-header {
+  padding-block: 0.35rem;
+}
+
 .page-title {
   letter-spacing: -0.06em;
 }
@@ -230,10 +324,17 @@ select {
   position: sticky;
   top: 0;
   z-index: 2;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  font-size: 11px;
+  letter-spacing: 0.05em;
 }
 
 .financial-table td {
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  padding-top: 0.42rem;
+  padding-bottom: 0.42rem;
+  font-size: 12px;
 }
 
 .financial-table tr:hover td {
@@ -309,7 +410,7 @@ select {
 }
 
 .attachment-placeholder {
-  min-height: 120px;
+  min-height: 96px;
   display: grid;
   place-items: center;
   background: rgba(15, 23, 42, 0.74);
@@ -329,12 +430,20 @@ select {
 }
 
 .mantine-AppShell-main {
-  padding-top: 0;
+  padding-top: calc(56px + 1rem);
 }
 
 @media (max-width: 62em) {
   .premium-shell .mantine-AppShell-navbar {
     width: 72px !important;
+  }
+
+  .shell-topbar-inner {
+    padding-right: 0.75rem;
+  }
+
+  .tenant-switcher-button.compact {
+    width: 200px;
   }
 
   .shell-nav-link {

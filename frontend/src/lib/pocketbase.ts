@@ -29,6 +29,7 @@ import type {
   APInvoice,
   ARInvoice,
   ConnectionStatus,
+  JournalLine,
 } from './mockData'
 import { formatDateTime } from './formatters'
 
@@ -67,6 +68,58 @@ type MockLoginResult = {
   tenants: LoginTenant[]
 }
 
+export type VendorMutationInput = {
+  tenantId: string
+  code: string
+  name: string
+  category: string
+  taxId?: string
+  balance: number
+  paymentTerms: string
+  status: Vendor['status']
+  risk?: Vendor['risk']
+}
+
+export type JournalMutationInput = {
+  tenantId: string
+  propertyId: string
+  jeNumber: string
+  date: string
+  source: string
+  description: string
+  status: JournalEntry['status']
+  postedBy?: string
+  lines: JournalLine[]
+}
+
+export type APInvoiceMutationInput = {
+  tenantId: string
+  vendorId: string
+  propertyId: string
+  invoiceNo: string
+  invoiceDate: string
+  dueDate: string
+  amount: number
+  balance: number
+  status: APInvoice['status']
+  approval?: string
+  aging?: string
+}
+
+export type ARInvoiceMutationInput = {
+  tenantId: string
+  customerId: string
+  propertyId: string
+  invoiceNo: string
+  invoiceDate: string
+  dueDate: string
+  amount: number
+  paid: number
+  balance: number
+  status: ARInvoice['status']
+  aging?: string
+}
+
 const pocketBaseUrl = import.meta.env.VITE_PB_URL?.trim() ?? ''
 const client = pocketBaseUrl ? new PocketBase(pocketBaseUrl) : null
 
@@ -77,6 +130,43 @@ const delay = async <T,>(value: T, ms = 180) =>
 
 function quote(value: string) {
   return JSON.stringify(value)
+}
+
+function ensureNonEmpty(value: string, field: string) {
+  if (!value.trim()) {
+    throw new Error(`${field} is required.`)
+  }
+}
+
+function ensureNonNegative(value: number, field: string) {
+  if (value < 0) {
+    throw new Error(`${field} cannot be negative.`)
+  }
+}
+
+function nowIso() {
+  return new Date().toISOString()
+}
+
+function mapPropertyIdToName(propertyId?: string) {
+  if (!propertyId) {
+    return properties[0]?.name ?? 'Unknown Property'
+  }
+  return properties.find((property) => property.id === propertyId)?.name ?? propertyId
+}
+
+function mapVendorIdToName(vendorId?: string) {
+  if (!vendorId) {
+    return vendors[0]?.name ?? 'Unknown Vendor'
+  }
+  return vendors.find((vendor) => vendor.id === vendorId)?.name ?? vendorId
+}
+
+function mapCustomerIdToName(customerId?: string) {
+  if (!customerId) {
+    return customers[0]?.name ?? 'Unknown Customer'
+  }
+  return customers.find((customer) => customer.id === customerId)?.name ?? customerId
 }
 
 export function isPocketBaseConfigured() {
@@ -124,6 +214,21 @@ export function buildTenantScopedFilter(filters: QueryFilters) {
 
 export function makeQueryKey(scope: string, filters: QueryFilters) {
   return [scope, filters.tenantId, filters.propertyId ?? 'all', filters.fiscalPeriod ?? 'period'] as const
+}
+
+export function calculateJournalTotals(lines: JournalLine[]) {
+  const debit = lines.reduce((sum, line) => sum + line.debit, 0)
+  const credit = lines.reduce((sum, line) => sum + line.credit, 0)
+  const difference = Number((debit - credit).toFixed(2))
+  return { debit, credit, difference }
+}
+
+export function assertJournalBalanced(lines: JournalLine[]) {
+  const totals = calculateJournalTotals(lines)
+  if (Math.abs(totals.difference) > 0.005) {
+    throw new Error('Journal cannot be posted while out of balance.')
+  }
+  return totals
 }
 
 export async function mockLogin(email: string, password: string): Promise<MockLoginResult> {
@@ -290,8 +395,149 @@ export async function fetchVendor(id: string) {
   return fetchCollectionOne<Vendor>(collectionNames.vendors, id, () => vendors.find((vendor) => vendor.id === id) ?? vendors[0])
 }
 
+export async function createVendor(input: VendorMutationInput) {
+  ensureNonEmpty(input.code, 'Vendor code')
+  ensureNonEmpty(input.name, 'Vendor name')
+  ensureNonNegative(input.balance, 'Vendor balance')
+
+  const payload = {
+    ...input,
+    taxId: input.taxId ?? '',
+    risk: input.risk ?? 'Low',
+    lastActivity: nowIso(),
+  }
+
+  if (client) {
+    return client.collection(collectionNames.vendors).create<Vendor>(payload as never)
+  }
+
+  const mockRecord: Vendor = {
+    id: `vend-${Date.now()}`,
+    ...payload,
+  }
+
+  return delay(mockRecord)
+}
+
+export async function updateVendor(id: string, input: VendorMutationInput) {
+  ensureNonEmpty(id, 'Vendor id')
+  ensureNonEmpty(input.code, 'Vendor code')
+  ensureNonEmpty(input.name, 'Vendor name')
+  ensureNonNegative(input.balance, 'Vendor balance')
+
+  const payload = {
+    ...input,
+    taxId: input.taxId ?? '',
+    risk: input.risk ?? 'Low',
+    lastActivity: nowIso(),
+  }
+
+  if (client) {
+    return client.collection(collectionNames.vendors).update<Vendor>(id, payload as never)
+  }
+
+  const existing = vendors.find((vendor) => vendor.id === id) ?? vendors[0]
+  return delay({ ...existing, ...payload, id })
+}
+
+export async function deleteVendor(id: string) {
+  ensureNonEmpty(id, 'Vendor id')
+  if (client) {
+    await client.collection(collectionNames.vendors).delete(id)
+    return
+  }
+  await delay(true)
+}
+
 export async function fetchARInvoices(filters: QueryFilters) {
   return fetchCollectionList<ARInvoice>(collectionNames.arInvoices, () => arInvoices.filter((invoice) => invoice.tenantId === filters.tenantId), filters)
+}
+
+export async function fetchARInvoice(id: string) {
+  return fetchCollectionOne<ARInvoice>(collectionNames.arInvoices, id, () => arInvoices.find((invoice) => invoice.id === id) ?? arInvoices[0])
+}
+
+export async function createARInvoice(input: ARInvoiceMutationInput) {
+  ensureNonEmpty(input.invoiceNo, 'AR invoice number')
+  ensureNonNegative(input.amount, 'AR amount')
+
+  if (client) {
+    return client.collection(collectionNames.arInvoices).create<ARInvoice>(input as never)
+  }
+
+  const mockRecord: ARInvoice = {
+    id: `ar-${Date.now()}`,
+    tenantId: input.tenantId,
+    invoiceNo: input.invoiceNo,
+    customer: mapCustomerIdToName(input.customerId),
+    property: mapPropertyIdToName(input.propertyId),
+    invoiceDate: input.invoiceDate,
+    dueDate: input.dueDate,
+    amount: input.amount,
+    paid: input.paid,
+    balance: input.balance,
+    status: input.status,
+    aging: input.aging ?? 'Current',
+  }
+
+  return delay(mockRecord)
+}
+
+export async function updateARInvoice(id: string, input: ARInvoiceMutationInput) {
+  ensureNonEmpty(id, 'AR invoice id')
+  if (client) {
+    return client.collection(collectionNames.arInvoices).update<ARInvoice>(id, input as never)
+  }
+
+  const existing = arInvoices.find((invoice) => invoice.id === id) ?? arInvoices[0]
+  return delay({
+    ...existing,
+    id,
+    tenantId: input.tenantId,
+    invoiceNo: input.invoiceNo,
+    customer: mapCustomerIdToName(input.customerId),
+    property: mapPropertyIdToName(input.propertyId),
+    invoiceDate: input.invoiceDate,
+    dueDate: input.dueDate,
+    amount: input.amount,
+    paid: input.paid,
+    balance: input.balance,
+    status: input.status,
+    aging: input.aging ?? existing.aging,
+  })
+}
+
+export async function deleteARInvoice(id: string) {
+  ensureNonEmpty(id, 'AR invoice id')
+  if (client) {
+    await client.collection(collectionNames.arInvoices).delete(id)
+    return
+  }
+  await delay(true)
+}
+
+export async function recordARPayment(id: string, amount: number) {
+  ensureNonEmpty(id, 'AR invoice id')
+  ensureNonNegative(amount, 'Payment amount')
+  const current = await fetchARInvoice(id)
+  const paid = Math.min(current.amount, current.paid + amount)
+  const balance = Math.max(0, current.amount - paid)
+  const status: ARInvoice['status'] = balance <= 0 ? 'Collected' : current.status
+
+  if (client) {
+    return client.collection(collectionNames.arInvoices).update<ARInvoice>(id, {
+      paid,
+      balance,
+      status,
+    } as never)
+  }
+
+  return delay({
+    ...current,
+    paid,
+    balance,
+    status,
+  })
 }
 
 export async function fetchCustomers(filters: QueryFilters) {
@@ -300,6 +546,159 @@ export async function fetchCustomers(filters: QueryFilters) {
 
 export async function fetchCustomer(id: string) {
   return fetchCollectionOne<Customer>(collectionNames.customers, id, () => customers.find((customer) => customer.id === id) ?? customers[0])
+}
+
+export async function saveJournalDraft(input: JournalMutationInput) {
+  ensureNonEmpty(input.jeNumber, 'Journal number')
+  ensureNonEmpty(input.description, 'Journal description')
+  if (!input.lines.length) {
+    throw new Error('At least one journal line is required.')
+  }
+
+  const totals = calculateJournalTotals(input.lines)
+
+  const payload = {
+    tenantId: input.tenantId,
+    propertyId: input.propertyId,
+    jeNumber: input.jeNumber,
+    date: input.date,
+    source: input.source,
+    description: input.description,
+    debit: totals.debit,
+    credit: totals.credit,
+    difference: totals.difference,
+    status: input.status,
+    postedBy: input.postedBy ?? 'System',
+    updatedAtLabel: nowIso(),
+  }
+
+  if (client) {
+    return client.collection(collectionNames.journalEntries).create<JournalEntry>(payload as never)
+  }
+
+  const mockRecord: JournalEntry = {
+    id: `je-${Date.now()}`,
+    tenantId: input.tenantId,
+    jeNumber: input.jeNumber,
+    date: input.date,
+    property: mapPropertyIdToName(input.propertyId),
+    source: input.source,
+    description: input.description,
+    debit: totals.debit,
+    credit: totals.credit,
+    difference: totals.difference,
+    status: input.status,
+    postedBy: input.postedBy ?? 'System',
+    updatedAt: nowIso(),
+    approvalStatus: input.status,
+    lines: input.lines,
+  }
+
+  return delay(mockRecord)
+}
+
+export async function postJournalEntry(id: string, lines: JournalLine[]) {
+  ensureNonEmpty(id, 'Journal id')
+  const totals = assertJournalBalanced(lines)
+
+  if (client) {
+    return client.collection(collectionNames.journalEntries).update<JournalEntry>(id, {
+      status: 'Posted',
+      difference: totals.difference,
+      debit: totals.debit,
+      credit: totals.credit,
+      updatedAtLabel: nowIso(),
+    } as never)
+  }
+
+  const existing = journalEntries.find((entry) => entry.id === id) ?? journalEntries[0]
+  return delay({
+    ...existing,
+    status: 'Posted' as const,
+    difference: totals.difference,
+    debit: totals.debit,
+    credit: totals.credit,
+    updatedAt: nowIso(),
+  })
+}
+
+export async function reverseJournalEntry(id: string) {
+  ensureNonEmpty(id, 'Journal id')
+  if (client) {
+    return client.collection(collectionNames.journalEntries).update<JournalEntry>(id, {
+      status: 'Rejected',
+      updatedAtLabel: nowIso(),
+    } as never)
+  }
+
+  const existing = journalEntries.find((entry) => entry.id === id) ?? journalEntries[0]
+  return delay({
+    ...existing,
+    status: 'Rejected' as const,
+    updatedAt: nowIso(),
+    approvalStatus: 'Reversed',
+  })
+}
+
+export async function createAPInvoice(input: APInvoiceMutationInput) {
+  ensureNonEmpty(input.invoiceNo, 'AP invoice number')
+  ensureNonNegative(input.amount, 'AP amount')
+
+  if (client) {
+    return client.collection(collectionNames.apInvoices).create<APInvoice>(input as never)
+  }
+
+  const mockRecord: APInvoice = {
+    id: `ap-${Date.now()}`,
+    tenantId: input.tenantId,
+    invoiceNo: input.invoiceNo,
+    vendor: mapVendorIdToName(input.vendorId),
+    property: mapPropertyIdToName(input.propertyId),
+    invoiceDate: input.invoiceDate,
+    dueDate: input.dueDate,
+    amount: input.amount,
+    balance: input.balance,
+    status: input.status,
+    approval: input.approval ?? 'Pending',
+    aging: input.aging ?? 'Current',
+    paymentHistory: [],
+    glDistribution: [],
+  }
+
+  return delay(mockRecord)
+}
+
+export async function updateAPInvoice(id: string, input: APInvoiceMutationInput) {
+  ensureNonEmpty(id, 'AP invoice id')
+  if (client) {
+    return client.collection(collectionNames.apInvoices).update<APInvoice>(id, input as never)
+  }
+
+  const existing = apInvoices.find((invoice) => invoice.id === id) ?? apInvoices[0]
+  return delay({
+    ...existing,
+    id,
+    tenantId: input.tenantId,
+    invoiceNo: input.invoiceNo,
+    vendor: mapVendorIdToName(input.vendorId),
+    property: mapPropertyIdToName(input.propertyId),
+    invoiceDate: input.invoiceDate,
+    dueDate: input.dueDate,
+    amount: input.amount,
+    balance: input.balance,
+    status: input.status,
+    approval: input.approval ?? existing.approval,
+    aging: input.aging ?? existing.aging,
+  })
+}
+
+export async function deleteAPInvoice(id: string) {
+  ensureNonEmpty(id, 'AP invoice id')
+  if (client) {
+    await client.collection(collectionNames.apInvoices).delete(id)
+    return
+  }
+  await delay(true)
 }
 
 export async function fetchTrialBalance(filters: QueryFilters) {

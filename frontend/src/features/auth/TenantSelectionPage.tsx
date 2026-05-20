@@ -40,7 +40,7 @@ export function TenantSelectionPage() {
           <Group justify="space-between" align="flex-start" wrap="wrap">
             <div>
               <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
-                Tenant selection
+                Tenant Selection
               </Text>
               <Title order={1}>Choose the active hotel group</Title>
               <Text c="rgba(255,255,255,.76)" maw={760} size="sm" fw={500} lh={1.55}>
@@ -62,17 +62,19 @@ export function TenantSelectionPage() {
           <Grid.Col span={{ base: 12, md: 8 }}>
             <Group grow align="end" className="tenant-search-row">
               <TextInput
-                label="Search tenant"
+                label="Search Tenant"
                 placeholder="Hotel group or region"
                 leftSection={<IconSearch size={14} />}
                 value={search}
                 onChange={(event) => setSearch(event.currentTarget.value)}
+                size="xs"
               />
               <Select
-                label="Recent tenant"
+                label="Recent Tenant"
                 data={recentTenantIds.map((id) => ({ value: id, label: tenants.find((tenant) => tenant.id === id)?.groupName ?? id }))}
                 value={selectedRecent}
                 onChange={setSelectedRecent}
+                size="xs"
               />
             </Group>
           </Grid.Col>

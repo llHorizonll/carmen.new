@@ -4,7 +4,11 @@ import { useAuthStore } from '../../features/auth/auth.store'
 import { useTenantStore } from '../../stores/tenant.store'
 import { tenants } from '../../lib/mockData'
 
-export function TenantSwitcher() {
+type TenantSwitcherProps = {
+  compact?: boolean
+}
+
+export function TenantSwitcher({ compact = false }: TenantSwitcherProps) {
   const selectedTenantId = useTenantStore((state) => state.selectedTenantId)
   const setTenant = useAuthStore((state) => state.setActiveTenant)
   const activeTenant = tenants.find((tenant) => tenant.id === selectedTenantId) ?? tenants[0]
@@ -12,12 +16,16 @@ export function TenantSwitcher() {
   return (
     <Menu shadow="lg" width={340} position="bottom-start" withinPortal>
       <Menu.Target>
-        <Button variant="subtle" rightSection={<IconChevronDown size={14} />} className="tenant-switcher-button">
-          <Stack gap={0} align="flex-start">
-            <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
+        <Button
+          variant="subtle"
+          rightSection={<IconChevronDown size={14} />}
+          className={compact ? 'tenant-switcher-button compact' : 'tenant-switcher-button sidebar'}
+        >
+          <Stack gap={compact ? 1 : 0} align="flex-start">
+            <Text className={compact ? 'ui-label tenant-switcher-label' : 'ui-label'} c="rgba(255,255,255,.82)" fw={700}>
               Tenant
             </Text>
-            <Text size="sm" fw={600} lineClamp={1}>
+            <Text size={compact ? 'xs' : 'sm'} fw={600} lineClamp={compact ? 1 : 2}>
               {activeTenant?.groupName ?? 'Select tenant'}
             </Text>
           </Stack>

@@ -1,5 +1,5 @@
 import { Badge, Button, Grid, Group, Paper, Stack, Text, Title } from '@mantine/core'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import type { MRT_ColumnDef } from 'mantine-react-table'
@@ -9,10 +9,11 @@ import { AuditTimeline } from '../../components/ui/AuditTimeline'
 import { ApprovalStatus } from '../../components/ui/ApprovalStatus'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { FinancialTable } from '../../components/tables/FinancialTable'
-import { fetchAPInvoice } from '../../lib/pocketbase'
+import { deleteAPInvoice, fetchAPInvoice, updateAPInvoice } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate } from '../../lib/formatters'
 import { LiveIndicator } from '../../components/ui/LiveIndicator'
 import type { APInvoice } from '../../lib/mockData'
+import { queryClient } from '../../lib/queryClient'
 
 export function APInvoiceDetailPage() {
   const params = useParams()
@@ -20,6 +21,34 @@ export function APInvoiceDetailPage() {
   const query = useQuery({
     queryKey: ['ap-invoice', invoiceId],
     queryFn: () => fetchAPInvoice(invoiceId),
+  })
+  const approvalMutation = useMutation({
+    mutationFn: (status: APInvoice['status']) =>
+      updateAPInvoice(invoiceId, {
+        tenantId: invoice?.tenantId ?? 'tenant-carmen',
+        vendorId: 'vend-1',
+        propertyId: 'prop-bkk',
+        invoiceNo: invoice?.invoiceNo ?? invoiceId,
+        invoiceDate: invoice?.invoiceDate ?? new Date().toISOString(),
+        dueDate: invoice?.dueDate ?? new Date().toISOString(),
+        amount: invoice?.amount ?? 0,
+        balance: status === 'Paid' ? 0 : (invoice?.balance ?? 0),
+        status,
+        approval: status === 'Approved' ? 'Finance' : invoice?.approval,
+        aging: invoice?.aging ?? 'Current',
+      }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['ap-invoice', invoiceId] }),
+        queryClient.invalidateQueries({ queryKey: ['ap-invoices'] }),
+      ])
+    },
+  })
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteAPInvoice(invoiceId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['ap-invoices'] })
+    },
   })
 
   const invoice = query.data
@@ -42,7 +71,14 @@ export function APInvoiceDetailPage() {
         badge={<Badge variant="light" color="yellow">AP Invoice Detail</Badge>}
         title={invoice?.invoiceNo ?? invoiceId}
         subtitle={`${invoice?.vendor ?? ''} | ${invoice?.property ?? ''} | Due ${formatDate(invoice?.dueDate ?? new Date().toISOString())}`}
-        actions={<Group gap="xs"><Button>Approve</Button><Button variant="light">Reject</Button><Button variant="light">Payment history</Button></Group>}
+        actions={
+          <Group gap="xs">
+            <Button onClick={() => approvalMutation.mutate('Approved')} loading={approvalMutation.isPending}>Approve</Button>
+            <Button variant="light" onClick={() => approvalMutation.mutate('Overdue')} loading={approvalMutation.isPending}>Reject</Button>
+            <Button variant="light" onClick={() => approvalMutation.mutate('Paid')} loading={approvalMutation.isPending}>Mark Paid</Button>
+            <Button color="red" variant="light" onClick={() => deleteMutation.mutate()} loading={deleteMutation.isPending}>Delete</Button>
+          </Group>
+        }
       />
 
       <Grid>
@@ -53,10 +89,10 @@ export function APInvoiceDetailPage() {
                 <div>
                   <Text fw={700}>Invoice summary</Text>
                   <Text size="sm" c="gray.4" fw={500}>
-                    Invoice header, amount breakdown, and payment context.
+                    Header totals, approval status, and payment posture.
                   </Text>
                 </div>
-                <LiveIndicator status="live" label="Approval status updating" />
+                <LiveIndicator status="live" label="Approval Status Updating" />
               </Group>
               <Group justify="space-between">
                 <Text c="gray.4" fw={500}>Invoice amount</Text>
@@ -70,7 +106,7 @@ export function APInvoiceDetailPage() {
                 <Text c="gray.4" fw={500}>Approval</Text>
                 <ApprovalStatus value={invoice?.status ?? 'Pending Approval'} />
               </Group>
-              <FinancialTable data={invoice?.glDistribution ?? []} columns={glColumns} title="GL distribution" />
+              <FinancialTable data={invoice?.glDistribution ?? []} columns={glColumns} title="GL Distribution" />
             </Stack>
           </PremiumCard>
         </Grid.Col>
@@ -81,8 +117,8 @@ export function APInvoiceDetailPage() {
                 <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>Vendor</Text>
                 <Title order={3}>{invoice?.vendor}</Title>
                 <Text size="sm" c="gray.4" fw={500}>{invoice?.property}</Text>
-                <Text size="sm" c="gray.4" fw={500}>Invoice date {formatDate(invoice?.invoiceDate ?? new Date().toISOString())}</Text>
-                <Text size="sm" c="gray.4" fw={500}>Due date {formatDate(invoice?.dueDate ?? new Date().toISOString())}</Text>
+                <Text size="sm" c="gray.4" fw={500}>Invoice Date {formatDate(invoice?.invoiceDate ?? new Date().toISOString())}</Text>
+                <Text size="sm" c="gray.4" fw={500}>Due Date {formatDate(invoice?.dueDate ?? new Date().toISOString())}</Text>
               </Stack>
             </PremiumCard>
             <PremiumCard p="md">
@@ -96,7 +132,7 @@ export function APInvoiceDetailPage() {
               <Stack gap={4}>
                 <Text fw={700}>Attachment</Text>
                 <Paper p="md" className="attachment-placeholder">
-                  <Text size="sm" c="gray.4" fw={500}>Invoice PDF preview placeholder</Text>
+                  <Text size="sm" c="gray.4" fw={500}>Invoice PDF preview panel</Text>
                 </Paper>
               </Stack>
             </PremiumCard>

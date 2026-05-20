@@ -13,6 +13,14 @@ Premium fintech-style hotel accounting SaaS for hospitality finance teams.
 From PowerShell on this PC:
 
 ```powershell
+cd C:\source\carmen.new
+npm install
+npm run dev
+```
+
+Or run directly inside `frontend/`:
+
+```powershell
 cd C:\source\carmen.new\frontend
 npm install
 npm run dev

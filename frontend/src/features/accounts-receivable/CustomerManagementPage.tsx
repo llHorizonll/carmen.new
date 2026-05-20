@@ -53,7 +53,13 @@ export function CustomerManagementPage() {
   return (
     <Stack gap="md">
       <PageHeader badge={<Badge variant="light" color="blue">Customer Management</Badge>} title="Customer Management" subtitle="Customer exposure, aging, and financial summary in one place." />
-      <TextInput label="Search customer" value={search} onChange={(event) => setSearch(event.currentTarget.value)} />
+      <TextInput
+        label="Search Customer"
+        placeholder="Customer code or customer name"
+        value={search}
+        onChange={(event) => setSearch(event.currentTarget.value)}
+        size="xs"
+      />
       <Grid>
         {[
           ['Total outstanding', customers.reduce((sum, customer) => sum + customer.outstanding, 0)],
@@ -70,7 +76,7 @@ export function CustomerManagementPage() {
         ))}
       </Grid>
       <FinancialTable data={filtered} columns={columns} title="Customers" subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`} onRowClick={(row) => { setSelected(row); openDrawer(); }} />
-      <Drawer opened={open} onClose={close} position="right" title="Customer summary" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="Customer financial summary" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="gray.4" fw={500}>{selected?.segment}</Text>

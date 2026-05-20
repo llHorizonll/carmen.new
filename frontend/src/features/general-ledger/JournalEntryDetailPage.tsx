@@ -1,5 +1,5 @@
 import { Badge, Button, Grid, Group, Stack, Text, Title } from '@mantine/core'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import type { MRT_ColumnDef } from 'mantine-react-table'
@@ -9,9 +9,10 @@ import { AuditTimeline } from '../../components/ui/AuditTimeline'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { PremiumCard } from '../../components/ui/PremiumCard'
 import { FinancialTable } from '../../components/tables/FinancialTable'
-import { fetchJournalEntry } from '../../lib/pocketbase'
+import { fetchJournalEntry, postJournalEntry, reverseJournalEntry } from '../../lib/pocketbase'
 import { formatCompactAmount, formatDate, formatDateTime } from '../../lib/formatters'
 import type { JournalEntry } from '../../lib/mockData'
+import { queryClient } from '../../lib/queryClient'
 
 export function JournalEntryDetailPage() {
   const params = useParams()
@@ -19,6 +20,26 @@ export function JournalEntryDetailPage() {
   const query = useQuery({
     queryKey: ['journal-entry', entryId],
     queryFn: () => fetchJournalEntry(entryId),
+  })
+  const postMutation = useMutation({
+    mutationFn: () => postJournalEntry(entryId, entry?.lines ?? []),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['journal-entry', entryId] }),
+        queryClient.invalidateQueries({ queryKey: ['journal-entries'] }),
+        queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+      ])
+    },
+  })
+  const reverseMutation = useMutation({
+    mutationFn: () => reverseJournalEntry(entryId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['journal-entry', entryId] }),
+        queryClient.invalidateQueries({ queryKey: ['journal-entries'] }),
+        queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+      ])
+    },
   })
 
   const entry = query.data
@@ -61,8 +82,16 @@ export function JournalEntryDetailPage() {
         subtitle={`${entry?.property ?? ''} | ${formatDate(entry?.date ?? new Date().toISOString())} | ${entry?.source ?? ''}`}
         actions={
           <Group gap="xs">
-            <Button>Post</Button>
-            <Button variant="light">Reverse</Button>
+            <Button
+              onClick={() => postMutation.mutate()}
+              disabled={Math.abs(entry?.difference ?? 0) > 0.005 || entry?.status === 'Posted'}
+              loading={postMutation.isPending}
+            >
+              Post
+            </Button>
+            <Button variant="light" onClick={() => reverseMutation.mutate()} loading={reverseMutation.isPending}>
+              Reverse
+            </Button>
             <Button variant="light">Duplicate</Button>
             <Button variant="light">Export</Button>
           </Group>
@@ -75,9 +104,9 @@ export function JournalEntryDetailPage() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <div>
-                  <Text fw={700}>Journal lines</Text>
+                  <Text fw={700}>Journal Lines</Text>
                   <Text size="sm" c="gray.4" fw={500}>
-                    Account-level debit and credit lines with balancing controls.
+                    Debit/credit lines with balance validation before posting.
                   </Text>
                 </div>
                 <Group gap="xs">
@@ -107,7 +136,7 @@ export function JournalEntryDetailPage() {
             <PremiumCard p="md">
               <Stack gap={6}>
                 <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>
-                  Approval panel
+                  Approval Panel
                 </Text>
                 <Title order={3}>{entry?.approvalStatus}</Title>
                 <ApprovalStatus value={entry?.status ?? 'Draft'} />
@@ -121,18 +150,18 @@ export function JournalEntryDetailPage() {
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={6}>
-                <Text fw={700}>Audit timeline</Text>
+                <Text fw={700}>Audit Timeline</Text>
                 <AuditTimeline items={timeline} />
               </Stack>
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Header summary</Text>
+                <Text fw={700}>Header Summary</Text>
                 <Text size="sm" c="gray.4" fw={500}>
                   JE {entry?.jeNumber} | {entry?.property}
                 </Text>
                 <Text size="sm" c="gray.4" fw={500}>
-                  Posted date {formatDate(entry?.date ?? new Date().toISOString())}
+                  Posted Date {formatDate(entry?.date ?? new Date().toISOString())}
                 </Text>
               </Stack>
             </PremiumCard>

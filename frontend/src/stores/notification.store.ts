@@ -22,10 +22,36 @@ export const useNotificationStore = create<NotificationStore>()(
       connectionStatus: 'live',
       lastSyncAt: null,
       pushNotification: (item) =>
-        set((state) => ({
-          items: [item, ...state.items].slice(0, 50),
-          lastSyncAt: item.timestamp,
-        })),
+        set((state) => {
+          const isRecentDuplicate = state.items.some((existing) => {
+            const sameEvent =
+              existing.type === item.type &&
+              existing.title === item.title &&
+              existing.message === item.message
+
+            if (!sameEvent) {
+              return false
+            }
+
+            const existingTime = Date.parse(existing.timestamp)
+            const incomingTime = Date.parse(item.timestamp)
+
+            if (Number.isNaN(existingTime) || Number.isNaN(incomingTime)) {
+              return true
+            }
+
+            return Math.abs(incomingTime - existingTime) < 15_000
+          })
+
+          if (isRecentDuplicate) {
+            return state
+          }
+
+          return {
+            items: [item, ...state.items].slice(0, 50),
+            lastSyncAt: item.timestamp,
+          }
+        }),
       seedNotifications: (items) => set({ items }),
       markRead: (id) =>
         set((state) => ({

@@ -6,7 +6,7 @@ import { useAuthStore } from '../../features/auth/auth.store'
 import { useNotificationStore } from '../../stores/notification.store'
 import { useTenantStore } from '../../stores/tenant.store'
 import { LiveIndicator } from '../ui/LiveIndicator'
-import { TenantSwitcher } from './TenantSwitcher'
+import { formatDateTime } from '../../lib/formatters'
 
 const breadcrumbMap: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -58,13 +58,13 @@ export function Topbar() {
       </Group>
 
       <Group gap="xs" wrap="nowrap" className="shell-topbar-actions">
-        <TenantSwitcher />
         <Select
           value={fiscalPeriod}
           onChange={(value) => value && setFiscalPeriod(value)}
           data={['FY2026 P04', 'FY2026 P05', 'FY2026 P06']}
           size="sm"
-          w={140}
+          w={112}
+          className="topbar-select topbar-select-period"
           comboboxProps={{ withinPortal: false }}
         />
         <Select
@@ -77,11 +77,12 @@ export function Topbar() {
             { value: 'prop-pattaya', label: 'Pattaya Beach' },
           ]}
           size="sm"
-          w={180}
+          w={132}
+          className="topbar-select topbar-select-property"
           comboboxProps={{ withinPortal: false }}
         />
-        <Button variant="subtle" leftSection={<IconCommand size={14} />} onClick={() => setCommandMenuOpen(true)}>
-          Command
+        <Button variant="subtle" size="compact-sm" leftSection={<IconCommand size={14} />} onClick={() => setCommandMenuOpen(true)}>
+          Search
         </Button>
         <ActionIcon variant="subtle" size="lg" onClick={() => setNotificationDrawerOpen(true)} aria-label="Notifications">
           <IconBell size={16} />
@@ -89,10 +90,10 @@ export function Topbar() {
         <ActionIcon variant="subtle" size="lg" onClick={toggleColorScheme} aria-label="Toggle color scheme">
           {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoon size={16} />}
         </ActionIcon>
-        <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Synced ${lastSyncAt}` : 'Live'} />
+        <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last sync ${formatDateTime(lastSyncAt)}` : 'Live'} />
         <Menu shadow="lg" position="bottom-end" withinPortal>
           <Menu.Target>
-            <Button variant="subtle" leftSection={<Avatar radius="xl" size="sm">{session?.user.name?.slice(0, 1) ?? 'C'}</Avatar>}>
+            <Button variant="subtle" size="compact-sm" className="topbar-user-button" leftSection={<Avatar radius="xl" size="sm">{session?.user.name?.slice(0, 1) ?? 'C'}</Avatar>}>
               {session?.user.name ?? 'User'}
             </Button>
           </Menu.Target>

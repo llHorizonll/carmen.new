@@ -29,7 +29,7 @@ export function UserManagementPage() {
 
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="blue">Users</Badge>} title="User Management" subtitle="Tenant access, roles, MFA status, and invite controls." actions={<Button>Invite user</Button>} />
+      <PageHeader badge={<Badge variant="light" color="blue">Users</Badge>} title="User Management" subtitle="Tenant access, roles, MFA status, and invite controls." actions={<Button>Invite User</Button>} />
       <Grid>
         <Grid.Col span={{ base: 12, xl: 8 }}>
           <FinancialTable data={users} columns={columns} onRowClick={(row) => { setSelected(row); openDrawer(); }} />
@@ -45,13 +45,13 @@ export function UserManagementPage() {
             <PremiumCard p="md">
               <Stack gap={4}>
                 <Text fw={700}>Invite user</Text>
-                <Text size="sm" c="dimmed">Placeholder invite workflow for finance operations teams.</Text>
+                <Text size="sm" c="dimmed">Invite workflow for finance operations teams with role and tenant scope.</Text>
               </Stack>
             </PremiumCard>
           </Stack>
         </Grid.Col>
       </Grid>
-      <Drawer opened={open} onClose={close} position="right" title="User detail" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="User details" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="dimmed">{selected?.email}</Text>
