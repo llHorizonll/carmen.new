@@ -10,6 +10,7 @@ type LiveIndicatorProps = {
 export function LiveIndicator({ status, label }: LiveIndicatorProps) {
   const tone = status === 'live' ? 'teal' : status === 'reconnecting' ? 'yellow' : 'red'
   const icon = status === 'live' ? <IconWifi size={14} /> : status === 'reconnecting' ? <IconLoader2 size={14} /> : <IconWifiOff size={14} />
+  const statusLabel = status === 'live' ? 'Live' : status === 'reconnecting' ? 'Reconnecting' : 'Offline'
 
   return (
     <Group gap={8} wrap="nowrap">
@@ -17,7 +18,7 @@ export function LiveIndicator({ status, label }: LiveIndicatorProps) {
         {icon}
       </Text>
       <Text size="sm" c="rgba(255,255,255,.72)" fw={600}>
-        {label ?? status}
+        {label ?? statusLabel}
       </Text>
     </Group>
   )

@@ -36,30 +36,30 @@ export function UserManagementPage() {
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 4 }}>
           <Stack gap="md">
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Stack gap={4}>
-                <Text fw={700}>Permission matrix preview</Text>
+                <Text fw={700}>Permission Matrix Preview</Text>
                 <Text size="sm" c="dimmed">Role-based access aligned to tenant and property scope.</Text>
               </Stack>
             </PremiumCard>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Stack gap={4}>
-                <Text fw={700}>Invite user</Text>
+                <Text fw={700}>Invite User</Text>
                 <Text size="sm" c="dimmed">Invite workflow for finance operations teams with role and tenant scope.</Text>
               </Stack>
             </PremiumCard>
           </Stack>
         </Grid.Col>
       </Grid>
-      <Drawer opened={open} onClose={close} position="right" title="User details" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="User Details" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="dimmed">{selected?.email}</Text>
-          <Text size="sm" c="dimmed">Role {selected?.role}</Text>
+          <Text size="sm" c="dimmed">Role: {selected?.role}</Text>
           <StatusBadge value={selected?.status ?? 'Active'} />
-          <Text size="sm" c="dimmed">Tenant access {selected?.tenantAccess.join(', ')}</Text>
-          <Text size="sm" c="dimmed">Properties {selected?.properties.join(', ')}</Text>
-          <Text size="sm" c="dimmed">MFA {selected?.mfa}</Text>
+          <Text size="sm" c="dimmed">Tenant Access: {selected?.tenantAccess.join(', ')}</Text>
+          <Text size="sm" c="dimmed">Properties: {selected?.properties.join(', ')}</Text>
+          <Text size="sm" c="dimmed">MFA: {selected?.mfa}</Text>
         </Stack>
       </Drawer>
     </Stack>

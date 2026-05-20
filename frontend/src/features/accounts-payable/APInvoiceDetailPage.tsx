@@ -87,7 +87,7 @@ export function APInvoiceDetailPage() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <div>
-                  <Text fw={700}>Invoice summary</Text>
+                  <Text fw={700}>Invoice Summary</Text>
                   <Text size="sm" c="gray.4" fw={500}>
                     Header totals, approval status, and payment posture.
                   </Text>
@@ -95,7 +95,7 @@ export function APInvoiceDetailPage() {
                 <LiveIndicator status="live" label="Approval Status Updating" />
               </Group>
               <Group justify="space-between">
-                <Text c="gray.4" fw={500}>Invoice amount</Text>
+                <Text c="gray.4" fw={500}>Invoice Amount</Text>
                 <Text fw={700} className="mono fin-number">{formatCompactAmount(invoice?.amount ?? 0)}</Text>
               </Group>
               <Group justify="space-between">
@@ -123,7 +123,7 @@ export function APInvoiceDetailPage() {
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Approval workflow</Text>
+                <Text fw={700}>Approval Workflow</Text>
                 <Text size="sm" c="gray.4" fw={500}>{invoice?.approval}</Text>
                 <StatusBadge value={invoice?.status ?? 'Pending Approval'} />
               </Stack>
@@ -132,13 +132,13 @@ export function APInvoiceDetailPage() {
               <Stack gap={4}>
                 <Text fw={700}>Attachment</Text>
                 <Paper p="md" className="attachment-placeholder">
-                  <Text size="sm" c="gray.4" fw={500}>Invoice PDF preview panel</Text>
+                  <Text size="sm" c="gray.4" fw={500}>Invoice PDF Preview Panel</Text>
                 </Paper>
               </Stack>
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Payment history</Text>
+                <Text fw={700}>Payment History</Text>
                 {(invoice?.paymentHistory ?? []).map((item) => (
                   <Text key={item} size="sm" c="gray.4" fw={500}>{item}</Text>
                 ))}
@@ -146,8 +146,8 @@ export function APInvoiceDetailPage() {
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Audit trail</Text>
-                <AuditTimeline items={[{ timestamp: invoice?.invoiceDate ?? new Date().toISOString(), title: 'Invoice created', detail: 'Captured from AP intake.' }, { timestamp: invoice?.dueDate ?? new Date().toISOString(), title: 'Due checked', detail: 'Aging status updated.' }, { timestamp: new Date().toISOString(), title: 'Workflow update', detail: 'Realtime approval indicator refreshed.' }]} />
+                <Text fw={700}>Audit Trail</Text>
+                <AuditTimeline items={[{ timestamp: invoice?.invoiceDate ?? new Date().toISOString(), title: 'Invoice Created', detail: 'Captured from AP intake.' }, { timestamp: invoice?.dueDate ?? new Date().toISOString(), title: 'Due Checked', detail: 'Aging status updated.' }, { timestamp: new Date().toISOString(), title: 'Workflow Update', detail: 'Realtime approval indicator refreshed.' }]} />
               </Stack>
             </PremiumCard>
           </Stack>

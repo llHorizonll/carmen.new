@@ -23,6 +23,7 @@ import { useTenantStore } from '../../stores/tenant.store'
 import { TenantSwitcher } from './TenantSwitcher'
 import { LiveIndicator } from '../ui/LiveIndicator'
 import { useNotificationStore } from '../../stores/notification.store'
+import { formatDateTime } from '../../lib/formatters'
 
 const groups = [
   {
@@ -65,6 +66,7 @@ export function Sidebar() {
   const selectedTenantId = useTenantStore((state) => state.selectedTenantId)
   const session = useAuthStore((state) => state.session)
   const connectionStatus = useNotificationStore((state) => state.connectionStatus)
+  const lastSyncAt = useNotificationStore((state) => state.lastSyncAt)
   const unreadCount = useNotificationStore((state) => state.items.filter((item) => !item.read).length)
   const location = useLocation()
   const navigate = useNavigate()
@@ -93,14 +95,14 @@ export function Sidebar() {
       {!collapsed ? (
         <Stack gap={6} className="sidebar-meta">
           <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
-            Signed in
+            Signed In
           </Text>
           <Text fw={600}>{session?.user.name}</Text>
           <Text size="sm" c="rgba(255,255,255,.78)" fw={500} lineClamp={1}>
             {session?.user.email}
           </Text>
           <TenantSwitcher />
-          <LiveIndicator status={connectionStatus} label={`Live sync | ${unreadCount} unread`} />
+          <LiveIndicator status={connectionStatus} label={`${lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Live'} | ${unreadCount} Unread`} />
         </Stack>
       ) : null}
 
@@ -139,11 +141,11 @@ export function Sidebar() {
       {!collapsed ? (
         <Box className="sidebar-footer">
           <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
-            Active tenant
+            Active Tenant
           </Text>
-          <Text fw={700}>{selectedTenantId ?? 'Select tenant'}</Text>
+          <Text fw={700}>{selectedTenantId ?? 'Select Tenant'}</Text>
           <Text size="sm" c="rgba(255,255,255,.78)" fw={500}>
-            Realtime-ready PocketBase shell.
+            Realtime PocketBase workspace.
           </Text>
         </Box>
       ) : null}

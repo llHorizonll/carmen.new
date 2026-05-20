@@ -44,15 +44,15 @@ export function TenantSelectionPage() {
               </Text>
               <Title order={1}>Choose the active hotel group</Title>
               <Text c="rgba(255,255,255,.76)" maw={760} size="sm" fw={500} lh={1.55}>
-                Select the tenant that scopes all reporting, approvals, and realtime updates.
+                Select the tenant that scopes all reporting, approvals, and Realtime updates.
               </Text>
             </div>
             <Group gap="xs">
               <Badge variant="light" color="teal">
-                Recent tenant ready
+                Recent Tenant Ready
               </Badge>
               <Button variant="subtle" onClick={() => navigate('/login')}>
-                Switch user
+                Switch User
               </Button>
             </Group>
           </Group>
@@ -100,13 +100,13 @@ export function TenantSelectionPage() {
                     </Group>
                     <Group justify="space-between">
                       <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
-                        Active properties
+                        Active Properties
                       </Text>
                       <Text fw={600}>{tenant.activeProperties}</Text>
                     </Group>
                     <Group justify="space-between">
                       <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
-                        Fiscal period
+                        Fiscal Period
                       </Text>
                       <Text fw={600}>{tenant.fiscalPeriod}</Text>
                     </Group>

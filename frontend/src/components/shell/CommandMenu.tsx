@@ -7,9 +7,9 @@ import { useAppStore } from '../../stores/app.store'
 
 const commands = [
   { label: 'Open Dashboard', path: '/app/dashboard' },
-  { label: 'Go to Journal Entries', path: '/app/general-ledger' },
-  { label: 'Go to AP Invoices', path: '/app/accounts-payable' },
-  { label: 'Go to AR Invoices', path: '/app/accounts-receivable' },
+  { label: 'Open Journal Entries', path: '/app/general-ledger' },
+  { label: 'Open AP Invoices', path: '/app/accounts-payable' },
+  { label: 'Open AR Invoices', path: '/app/accounts-receivable' },
   { label: 'View Trial Balance', path: '/app/trial-balance' },
   { label: 'Open Approvals', path: '/app/approvals' },
   { label: 'Open Notifications', path: '/app/notifications' },

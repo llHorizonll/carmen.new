@@ -57,9 +57,9 @@ export function ARInvoiceListPage() {
   })
   const invoices = useMemo(() => query.data ?? [], [query.data])
 
-  const statuses = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.status))], [invoices])
-  const properties = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.property))], [invoices])
-  const customers = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.customer))], [invoices])
+  const statuses = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.status)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
+  const properties = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.property)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
+  const customers = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.customer)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
 
   const filtered = invoices.filter((invoice) => {
     const matchesStatus = statusFilter === 'all' || invoice.status === statusFilter
@@ -117,7 +117,7 @@ export function ARInvoiceListPage() {
           ['Credit Notes', 1],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>{label}</Text>
               <Text fw={700}>{formatCompactAmount(value as number)}</Text>
             </PremiumCard>

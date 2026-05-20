@@ -53,20 +53,20 @@ export function TrialBalanceReportPage() {
     <Stack gap="md">
       <PageHeader badge={<Badge variant="light" color="teal">Reports</Badge>} title="Trial Balance Report" subtitle="Account balances by period with sticky headers and export-ready totals." actions={<Group gap="xs"><Button variant="light">Export Excel</Button><Button variant="light">Export PDF</Button><Button variant="light">Export CSV</Button></Group>} />
       <Grid>
-        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Property" data={['all', 'Bangkok', 'Phuket', 'Chiang Mai', 'Pattaya']} value={property} onChange={(value) => setProperty(value ?? 'all')} size="xs" /></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 3 }}><Select label="Property" data={[{ value: 'all', label: 'All' }, { value: 'Bangkok', label: 'Bangkok' }, { value: 'Phuket', label: 'Phuket' }, { value: 'Chiang Mai', label: 'Chiang Mai' }, { value: 'Pattaya', label: 'Pattaya' }]} value={property} onChange={(value) => setProperty(value ?? 'all')} size="xs" /></Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}><Select label="Fiscal Year" data={['FY2026', 'FY2025']} value="FY2026" onChange={() => undefined} size="xs" /></Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}><Select label="Period" data={['FY2026 P04', 'FY2026 P05']} value={period} onChange={(value) => setPeriod(value ?? fiscalPeriod)} size="xs" /></Grid.Col>
         <Grid.Col span={{ base: 12, md: 3 }}><TextInput label="Account Range" value={accountRange} onChange={(event) => setAccountRange(event.currentTarget.value)} size="xs" /></Grid.Col>
       </Grid>
       <Grid>
         {[
-          ['Opening variance', 0],
-          ['Period variance', 0],
-          ['Closing variance', 0],
+          ['Opening Variance', 0],
+          ['Period Variance', 0],
+          ['Closing Variance', 0],
           ['Accounts', rows.length],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>{label}</Text>
               <Text fw={700}>{typeof value === 'number' ? formatCompactAmount(value as number) : String(value)}</Text>
             </PremiumCard>
@@ -80,11 +80,11 @@ export function TrialBalanceReportPage() {
         subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`}
         footer={
           <Group justify="space-between">
-            <Text size="sm" c="gray.4" fw={500}>Totals</Text>
-            <Group gap="lg">
-              <Text size="sm">Closing debit {formatCompactAmount(totals.closingDebit)}</Text>
-              <Text size="sm">Closing credit {formatCompactAmount(totals.closingCredit)}</Text>
-            </Group>
+              <Text size="sm" c="gray.4" fw={500}>Totals</Text>
+              <Group gap="lg">
+              <Text size="sm">Closing Debit {formatCompactAmount(totals.closingDebit)}</Text>
+              <Text size="sm">Closing Credit {formatCompactAmount(totals.closingCredit)}</Text>
+              </Group>
           </Group>
         }
       />

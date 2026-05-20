@@ -18,15 +18,15 @@ export function NotificationsPage() {
       <PageHeader
         badge={<Badge variant="light" color="teal">Notifications</Badge>}
         title="Realtime Notifications"
-        subtitle="Grouped notification center with read/unread state and live status."
-        actions={<LiveIndicator status={connectionStatus} label={lastSyncAt ? `Synced ${formatDateTime(lastSyncAt)}` : 'Waiting for events'} />}
+        subtitle="Grouped notification center with read/unread status and live sync context."
+        actions={<LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Waiting for Events'} />}
       />
       <Group justify="space-between" align="center">
         <Text size="sm" c="dimmed">
-          {unreadCount} unread
+          {unreadCount} Unread
         </Text>
         <Text size="sm" c="dimmed">
-          {items.length} total
+          {items.length} Total
         </Text>
       </Group>
       {items.length ? (
@@ -49,8 +49,8 @@ export function NotificationsPage() {
         </Stack>
       ) : (
         <EmptyState
-          title="No notifications yet"
-          description="Realtime events will appear here once the websocket stream starts delivering notifications."
+          title="No Notifications Yet"
+          description="Realtime events appear here when the Websocket stream starts delivering notifications."
         />
       )}
     </Stack>

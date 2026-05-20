@@ -64,9 +64,9 @@ export function APInvoiceListPage() {
   })
 
   const invoices = useMemo(() => query.data ?? [], [query.data])
-  const vendors = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.vendor))], [invoices])
-  const properties = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.property))], [invoices])
-  const statuses = useMemo(() => ['all', ...new Set(invoices.map((invoice) => invoice.status))], [invoices])
+  const vendors = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.vendor)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
+  const properties = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.property)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
+  const statuses = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(invoices.map((invoice) => invoice.status)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [invoices])
 
   const filtered = invoices.filter((invoice) => {
     const matchesVendor = vendorFilter === 'all' || invoice.vendor === vendorFilter
@@ -140,7 +140,7 @@ export function APInvoiceListPage() {
           ['Payment Run Total', filtered.reduce((sum, item) => sum + item.balance, 0)],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Stack gap={4}>
                 <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>
                   {label}

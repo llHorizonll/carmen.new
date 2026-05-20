@@ -141,7 +141,7 @@ export function JournalEntryDetailPage() {
                 <Title order={3}>{entry?.approvalStatus}</Title>
                 <ApprovalStatus value={entry?.status ?? 'Draft'} />
                 <Text size="sm" c="gray.4" fw={500}>
-                  Posted by {entry?.postedBy}
+                  Posted By {entry?.postedBy}
                 </Text>
                 <Text size="sm" c="gray.4" fw={500}>
                   Updated {formatDateTime(entry?.updatedAt ?? new Date().toISOString())}

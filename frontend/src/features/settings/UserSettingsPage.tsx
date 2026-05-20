@@ -15,21 +15,21 @@ export function UserSettingsPage() {
       <PageHeader badge={<Badge variant="light" color="gray">User Settings</Badge>} title="User Settings" subtitle="Profile, theme, notifications, shortcuts, and security preferences." />
       <Grid>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
-              <Text fw={700}>Profile settings</Text>
+              <Text fw={700}>Profile Settings</Text>
               <TextInput label="Full Name" placeholder="Maya Srisuk" size="xs" />
               <TextInput label="Email" placeholder="maya.finance@carmen.cloud" size="xs" />
             </Stack>
           </PremiumCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
-              <Text fw={700}>Theme settings</Text>
+              <Text fw={700}>Theme Settings</Text>
               <Group justify="space-between">
                 <Text size="sm" c="gray.4" fw={500}>
-                  Dark mode first
+                  Dark Mode First
                 </Text>
                 <Switch checked={colorScheme === 'dark'} onChange={toggleColorScheme} />
               </Group>
@@ -38,18 +38,18 @@ export function UserSettingsPage() {
           </PremiumCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
-              <Text fw={700}>Notification preferences</Text>
+              <Text fw={700}>Notification Preferences</Text>
               <Group justify="space-between">
                 <Text size="sm" c="gray.4" fw={500}>
-                  Invoice approvals
+                  Invoice Approvals
                 </Text>
                 <Switch defaultChecked />
               </Group>
               <Group justify="space-between">
                 <Text size="sm" c="gray.4" fw={500}>
-                  Journal postings
+                  Journal Postings
                 </Text>
                 <Switch defaultChecked />
               </Group>
@@ -63,26 +63,26 @@ export function UserSettingsPage() {
           </PremiumCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
-              <Text fw={700}>Keyboard shortcuts</Text>
+              <Text fw={700}>Keyboard Shortcuts</Text>
               <Text size="sm" c="gray.4" fw={500}>
-                Ctrl/Cmd + K | open search
+                Ctrl/Cmd + K | Open Search
               </Text>
               <Text size="sm" c="gray.4" fw={500}>
-                N | new journal entry
+                N | New Journal Entry
               </Text>
               <Text size="sm" c="gray.4" fw={500}>
-                G then A | open AP
+                G then A | Open AP
               </Text>
               <Text size="sm" c="gray.4" fw={500}>
-                G then R | open AR
+                G then R | Open AR
               </Text>
             </Stack>
           </PremiumCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
               <Text fw={700}>Security</Text>
               <Text size="sm" c="gray.4" fw={500}>
@@ -92,9 +92,9 @@ export function UserSettingsPage() {
           </PremiumCard>
         </Grid.Col>
         <Grid.Col span={{ base: 12, xl: 6 }}>
-          <PremiumCard p="md">
+          <PremiumCard p="sm">
             <Stack gap="sm">
-              <Text fw={700}>Session list</Text>
+              <Text fw={700}>Session List</Text>
               <Text size="sm" c="gray.4" fw={500}>
                 Current and recent sign-in sessions appear here.
               </Text>

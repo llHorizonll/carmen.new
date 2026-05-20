@@ -79,7 +79,7 @@ export function ARInvoiceDetailPage() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <div>
-                  <Text fw={700}>Invoice summary</Text>
+                  <Text fw={700}>Invoice Summary</Text>
                   <Text size="sm" c="gray.4" fw={500}>
                     Balance position, collection status, and aging context.
                   </Text>
@@ -87,7 +87,7 @@ export function ARInvoiceDetailPage() {
                 <LiveIndicator status="live" label="Realtime Collection Updates" />
               </Group>
               <Group justify="space-between">
-                <Text c="gray.4" fw={500}>Invoice amount</Text>
+                <Text c="gray.4" fw={500}>Invoice Amount</Text>
                 <Text fw={700} className="mono fin-number">{formatCompactAmount(invoice?.amount ?? 0)}</Text>
               </Group>
               <Group justify="space-between">
@@ -99,7 +99,7 @@ export function ARInvoiceDetailPage() {
                 <Text fw={700} className="mono fin-number">{formatCompactAmount(invoice?.balance ?? 0)}</Text>
               </Group>
               <Group justify="space-between">
-                <Text c="gray.4" fw={500}>Aging bucket</Text>
+                <Text c="gray.4" fw={500}>Aging Bucket</Text>
                 <Text fw={700}>{invoice?.aging ?? 'Current'}</Text>
               </Group>
               <Group justify="space-between">
@@ -122,20 +122,20 @@ export function ARInvoiceDetailPage() {
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Collection notes</Text>
+                <Text fw={700}>Collection Notes</Text>
                 <Paper p="md" className="attachment-placeholder">
-                  <Text size="sm" c="gray.4" fw={500}>Follow-up log and remittance details</Text>
+                  <Text size="sm" c="gray.4" fw={500}>Follow-up Log and Remittance Details</Text>
                 </Paper>
               </Stack>
             </PremiumCard>
             <PremiumCard p="md">
               <Stack gap={4}>
-                <Text fw={700}>Activity timeline</Text>
+                <Text fw={700}>Activity Timeline</Text>
                 <AuditTimeline
                   items={[
-                    { timestamp: invoice?.invoiceDate ?? new Date().toISOString(), title: 'Invoice created', detail: 'Receivable posted from source channel.' },
+                    { timestamp: invoice?.invoiceDate ?? new Date().toISOString(), title: 'Invoice Created', detail: 'Receivable posted from source channel.' },
                     { timestamp: invoice?.dueDate ?? new Date().toISOString(), title: 'Due Date Monitored', detail: `Aging bucket: ${invoice?.aging ?? 'Current'}.` },
-                    { timestamp: new Date().toISOString(), title: 'Status synchronized', detail: 'Realtime subscription refreshed collection status.' },
+                    { timestamp: new Date().toISOString(), title: 'Status Synchronized', detail: 'Realtime subscription refreshed collection status.' },
                   ]}
                 />
               </Stack>

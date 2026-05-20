@@ -89,7 +89,7 @@ export function DashboardPage() {
             <Box>
               <Group gap="xs" mb={6}>
                 <Badge variant="light" color="teal">
-                  {connectionStatus === 'live' ? 'Live websocket' : connectionStatus}
+                  {connectionStatus === 'live' ? 'Live Websocket' : connectionStatus}
                 </Badge>
                 <Badge variant="light" color="gray">
                   {snapshot?.fiscalPeriod ?? fiscalPeriod}
@@ -103,7 +103,7 @@ export function DashboardPage() {
               </Text>
             </Box>
             <Stack gap={4} align="flex-end">
-              <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Waiting for sync'} />
+              <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Waiting for Sync'} />
               <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>
                 Property {selectedPropertyId}
               </Text>
@@ -140,7 +140,7 @@ export function DashboardPage() {
                   </Title>
                 </div>
                 <Badge variant="light" color="red">
-                  Income audit
+                  Income Audit
                 </Badge>
               </Group>
               <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
@@ -175,13 +175,13 @@ export function DashboardPage() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <div>
-                  <Text fw={700}>Property performance</Text>
+                  <Text fw={700}>Property Performance</Text>
                   <Text size="sm" c="rgba(255,255,255,.76)" fw={500}>
                     Occupancy, margin, and revenue signal by property.
                   </Text>
                 </div>
                 <Badge variant="light" color="gray">
-                  Dense grid
+                  Dense Grid
                 </Badge>
               </Group>
               <HotelPerformanceGrid items={snapshot?.propertyPerformance ?? []} />
@@ -192,7 +192,7 @@ export function DashboardPage() {
           <FinancialTable
             data={snapshot?.recentJournals ?? []}
             columns={journalColumns}
-            title="Recent journal entries"
+            title="Recent Journal Entries"
             subtitle="Posted and draft journals in the active tenant."
             footer={
               <Group justify="space-between">

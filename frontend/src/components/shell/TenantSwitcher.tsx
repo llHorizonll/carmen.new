@@ -26,7 +26,7 @@ export function TenantSwitcher({ compact = false }: TenantSwitcherProps) {
               Tenant
             </Text>
             <Text size={compact ? 'xs' : 'sm'} fw={600} lineClamp={compact ? 1 : 2}>
-              {activeTenant?.groupName ?? 'Select tenant'}
+              {activeTenant?.groupName ?? 'Select Tenant'}
             </Text>
           </Stack>
         </Button>

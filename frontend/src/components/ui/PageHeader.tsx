@@ -11,9 +11,9 @@ type PageHeaderProps = {
 
 export function PageHeader({ title, subtitle, badge, actions }: PageHeaderProps) {
   return (
-    <PremiumCard p="lg" className="page-header">
+    <PremiumCard p="md" className="page-header">
       <Group justify="space-between" align="flex-start" wrap="wrap">
-        <Stack gap={6}>
+        <Stack gap={4}>
           {badge ? <Box>{badge}</Box> : null}
           <Title order={1} className="page-title">
             {title}

@@ -68,9 +68,9 @@ export function JournalEntryListPage() {
   })
 
   const entries = useMemo(() => query.data ?? [], [query.data])
-  const properties = useMemo(() => ['all', ...new Set(entries.map((entry) => entry.property))], [entries])
-  const statuses = useMemo(() => ['all', ...new Set(entries.map((entry) => entry.status))], [entries])
-  const sources = useMemo(() => ['all', ...new Set(entries.map((entry) => entry.source))], [entries])
+  const properties = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(entries.map((entry) => entry.property)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [entries])
+  const statuses = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(entries.map((entry) => entry.status)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [entries])
+  const sources = useMemo(() => [{ value: 'all', label: 'All' }, ...new Set(entries.map((entry) => entry.source)).values()].map((item) => typeof item === 'string' ? { value: item, label: item } : item), [entries])
 
   const filtered = entries.filter((entry) => {
     const matchesProperty = propertyFilter === 'all' || entry.property === propertyFilter

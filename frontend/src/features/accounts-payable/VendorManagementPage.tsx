@@ -152,13 +152,13 @@ export function VendorManagementPage() {
       />
       <Grid>
         {[
-          ['Low risk', vendors.filter((vendor) => vendor.risk === 'Low').length],
+          ['Low Risk', vendors.filter((vendor) => vendor.risk === 'Low').length],
           ['Review', vendors.filter((vendor) => vendor.status === 'Review').length],
           ['Hold', vendors.filter((vendor) => vendor.status === 'Hold').length],
           ['Balance', vendors.reduce((sum, vendor) => sum + vendor.balance, 0)],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>
                 {label}
               </Text>
@@ -177,7 +177,7 @@ export function VendorManagementPage() {
           openDrawer()
         }}
       />
-      <Drawer opened={open} onClose={close} position="right" title="Vendor summary" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="Vendor Summary" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="gray.4" fw={500}>
@@ -185,13 +185,13 @@ export function VendorManagementPage() {
           </Text>
           <StatusBadge value={selected?.status ?? 'Active'} />
           <Text size="sm" c="gray.4" fw={500}>
-            Category {selected?.category}
+            Category: {selected?.category}
           </Text>
           <Text size="sm" c="gray.4" fw={500}>
-            Balance {formatCompactAmount(selected?.balance ?? 0)}
+            Balance: {formatCompactAmount(selected?.balance ?? 0)}
           </Text>
           <Text size="sm" c="gray.4" fw={500}>
-            Last activity {formatDateTime(selected?.lastActivity ?? new Date().toISOString())}
+            Last Activity: {formatDateTime(selected?.lastActivity ?? new Date().toISOString())}
           </Text>
           <Group grow>
             <Button variant="light" onClick={openEdit}>Edit</Button>

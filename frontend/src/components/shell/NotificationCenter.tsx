@@ -21,16 +21,17 @@ export function NotificationCenter() {
       Earlier: items.slice(4),
     }
   }, [items])
+  const connectionLabel = connectionStatus === 'live' ? 'Live' : connectionStatus === 'reconnecting' ? 'Reconnecting' : 'Offline'
 
   return (
-    <Drawer opened={open} onClose={() => setOpen(false)} position="right" size="md" title="Realtime notifications" overlayProps={{ backgroundOpacity: 0.25, blur: 2 }}>
+    <Drawer opened={open} onClose={() => setOpen(false)} position="right" size="md" title="Realtime Notifications" overlayProps={{ backgroundOpacity: 0.25, blur: 2 }}>
       <Stack gap="md" className="notification-center">
         <Group justify="space-between">
           <Badge variant="light" color={connectionStatus === 'live' ? 'teal' : connectionStatus === 'reconnecting' ? 'yellow' : 'red'}>
-            {connectionStatus}
+            {connectionLabel}
           </Badge>
           <Button variant="subtle" size="xs" leftSection={<IconCheck size={14} />} onClick={markAllRead}>
-            Mark all read
+            Mark All Read
           </Button>
         </Group>
         <ScrollArea h="calc(100vh - 180px)">

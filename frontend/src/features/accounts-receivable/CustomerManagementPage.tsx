@@ -62,13 +62,13 @@ export function CustomerManagementPage() {
       />
       <Grid>
         {[
-          ['Total outstanding', customers.reduce((sum, customer) => sum + customer.outstanding, 0)],
-          ['Watch list', customers.filter((customer) => customer.status === 'Watch').length],
+          ['Total Outstanding', customers.reduce((sum, customer) => sum + customer.outstanding, 0)],
+          ['Watch List', customers.filter((customer) => customer.status === 'Watch').length],
           ['Blocked', customers.filter((customer) => customer.status === 'Blocked').length],
-          ['Credit limit', customers.reduce((sum, customer) => sum + customer.creditLimit, 0)],
+          ['Credit Limit', customers.reduce((sum, customer) => sum + customer.creditLimit, 0)],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, sm: 6, xl: 3 }}>
-            <PremiumCard p="md">
+            <PremiumCard p="sm">
               <Text size="xs" tt="uppercase" fw={600} c="gray.4" style={{ letterSpacing: '0.08em' }}>{label}</Text>
               <Text fw={700}>{typeof value === 'number' ? formatCompactAmount(value as number) : String(value)}</Text>
             </PremiumCard>
@@ -76,14 +76,14 @@ export function CustomerManagementPage() {
         ))}
       </Grid>
       <FinancialTable data={filtered} columns={columns} title="Customers" subtitle={`Tenant ${tenantId} | ${fiscalPeriod}`} onRowClick={(row) => { setSelected(row); openDrawer(); }} />
-      <Drawer opened={open} onClose={close} position="right" title="Customer financial summary" size="sm">
+      <Drawer opened={open} onClose={close} position="right" title="Customer Financial Summary" size="sm">
         <Stack gap="sm">
           <Text fw={700}>{selected?.name}</Text>
           <Text size="sm" c="gray.4" fw={500}>{selected?.segment}</Text>
           <StatusBadge value={selected?.status ?? 'Active'} />
-          <Text size="sm" c="gray.4" fw={500}>Outstanding {formatCompactAmount(selected?.outstanding ?? 0)}</Text>
-          <Text size="sm" c="gray.4" fw={500}>Credit limit {formatCompactAmount(selected?.creditLimit ?? 0)}</Text>
-          <Text size="sm" c="gray.4" fw={500}>Last invoice {selected?.lastInvoice}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Outstanding: {formatCompactAmount(selected?.outstanding ?? 0)}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Credit Limit: {formatCompactAmount(selected?.creditLimit ?? 0)}</Text>
+          <Text size="sm" c="gray.4" fw={500}>Last Invoice: {selected?.lastInvoice}</Text>
         </Stack>
       </Drawer>
     </Stack>

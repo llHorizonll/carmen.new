@@ -44,6 +44,7 @@ export function DataTable<TData extends Record<string, unknown>>({
 }: DataTableProps<TData>) {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const totalRows = data.length
 
   const filteredData = useMemo(() => {
     if (!search.trim()) {
@@ -57,11 +58,12 @@ export function DataTable<TData extends Record<string, unknown>>({
   const pageCount = Math.max(1, Math.ceil(filteredData.length / initialPageSize))
   const safePage = Math.min(page, pageCount)
   const pageData = filteredData.slice((safePage - 1) * initialPageSize, safePage * initialPageSize)
+  const hasActiveSearch = search.trim().length > 0
 
   return (
     <Box>
-      <PremiumCard p="md" className="table-paper glass-border">
-        <Group justify="space-between" align="flex-start" mb="sm" wrap="wrap">
+      <PremiumCard p="sm" className="table-paper glass-border">
+        <Group justify="space-between" align="flex-start" mb={8} wrap="wrap">
           <Box>
             {title ? <Text className="ui-label" c="rgba(255,255,255,.82)" fw={700}>{title}</Text> : null}
             {subtitle ? (
@@ -71,7 +73,17 @@ export function DataTable<TData extends Record<string, unknown>>({
             ) : null}
           </Box>
           <Group gap="sm" wrap="wrap">
-            <TextInput label="Global Search" placeholder="Search rows..." value={search} onChange={(event) => setSearch(event.currentTarget.value)} size="xs" />
+            <TextInput
+              label="Global Search"
+              placeholder="Search records..."
+              value={search}
+              onChange={(event) => {
+                setSearch(event.currentTarget.value)
+                setPage(1)
+              }}
+              size="xs"
+              w={220}
+            />
             {toolbarActions ? <Box>{toolbarActions}</Box> : null}
           </Group>
         </Group>
@@ -93,42 +105,52 @@ export function DataTable<TData extends Record<string, unknown>>({
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {pageData.map((row, rowIndex) => (
-                <Table.Tr
-                  key={rowIndex}
-                  onClick={() => onRowClick?.(row)}
-                  style={{ cursor: onRowClick ? 'pointer' : 'default' }}
-                >
-                {columns.map((column, colIndex) => {
-                    const col = asColumnSubset(column)
-                    const cellProps = typeof col.mantineTableBodyCellProps === 'function' ? undefined : col.mantineTableBodyCellProps
-                    const value = getCellValue(row, col.accessorKey as keyof TData & string | undefined)
-                    const cell = {
-                      getValue: <TValue = unknown>() => value as TValue,
-                    }
+              {pageData.length > 0 ? (
+                pageData.map((row, rowIndex) => (
+                  <Table.Tr
+                    key={rowIndex}
+                    onClick={() => onRowClick?.(row)}
+                    style={{ cursor: onRowClick ? 'pointer' : 'default' }}
+                  >
+                    {columns.map((column, colIndex) => {
+                      const col = asColumnSubset(column)
+                      const cellProps = typeof col.mantineTableBodyCellProps === 'function' ? undefined : col.mantineTableBodyCellProps
+                      const value = getCellValue(row, col.accessorKey as keyof TData & string | undefined)
+                      const cell = {
+                        getValue: <TValue = unknown>() => value as TValue,
+                      }
 
-                    return (
-                      <Table.Td key={col.accessorKey ?? colIndex} style={{ textAlign: cellProps?.align ?? 'left' }}>
-                        {col.Cell ? col.Cell({ cell, row: { original: row } } as never) : String(value ?? '')}
-                      </Table.Td>
-                    )
-                  })}
+                      return (
+                        <Table.Td key={col.accessorKey ?? colIndex} style={{ textAlign: cellProps?.align ?? 'left' }}>
+                          {col.Cell ? col.Cell({ cell, row: { original: row } } as never) : String(value ?? '')}
+                        </Table.Td>
+                      )
+                    })}
+                  </Table.Tr>
+                ))
+              ) : (
+                <Table.Tr>
+                  <Table.Td colSpan={columns.length}>
+                    <Text size="sm" c="dimmed" ta="center" py={8}>
+                      {hasActiveSearch ? 'No matching records for the current search or filters.' : 'No records available for this view.'}
+                    </Text>
+                  </Table.Td>
                 </Table.Tr>
-              ))}
+              )}
             </Table.Tbody>
           </Table>
         </ScrollArea>
 
-        <Group justify="space-between" mt="sm" wrap="wrap">
+        <Group justify="space-between" mt={8} wrap="wrap">
           <Text size="sm" c="dimmed">
-            {filteredData.length} rows
+            Showing {pageData.length} rows on this page ({filteredData.length} filtered, {totalRows} total)
           </Text>
-          <Pagination value={safePage} onChange={setPage} total={pageCount} />
+          <Pagination value={safePage} onChange={setPage} total={pageCount} size="xs" withEdges />
         </Group>
       </PremiumCard>
 
       {footer ? (
-        <PremiumCard p="md" className="table-footer mt-3">
+        <PremiumCard p="sm" className="table-footer mt-3">
           {footer}
         </PremiumCard>
       ) : null}

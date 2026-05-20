@@ -16,12 +16,12 @@ export function IncomeAuditPage() {
 
   return (
     <Stack gap="md">
-      <PageHeader badge={<Badge variant="light" color="orange">Income Audit</Badge>} title="Income Audit" subtitle="Night audit, POS checks, and revenue validation in a realtime operational view." />
+      <PageHeader badge={<Badge variant="light" color="orange">Income Audit</Badge>} title="Income Audit" subtitle="Night audit, POS checks, and revenue validation in a Realtime operational view." />
       <Grid>
         {[
-          ['Revenue today', formatCurrency(snapshot?.dailyRevenue ?? 0)],
+          ['Revenue Today', formatCurrency(snapshot?.dailyRevenue ?? 0)],
           ['Exceptions', String(snapshot?.exceptions ?? 0)],
-          ['Last sync', snapshot?.lastSyncAt ? formatDateTime(snapshot.lastSyncAt) : 'Pending'],
+          ['Last Sync', snapshot?.lastSyncAt ? formatDateTime(snapshot.lastSyncAt) : 'Pending'],
         ].map(([label, value]) => (
           <Grid.Col key={String(label)} span={{ base: 12, md: 4 }}>
             <PremiumCard p="md">
@@ -35,7 +35,7 @@ export function IncomeAuditPage() {
         <Grid.Col span={{ base: 12, xl: 8 }}>
           <PremiumCard p="md">
             <Stack gap="sm">
-              <Text fw={700}>Anomaly feed</Text>
+              <Text fw={700}>Anomaly Feed</Text>
               {snapshot?.anomalies.map((anomaly) => (
                 <Group key={anomaly.id} justify="space-between">
                   <div>
@@ -53,11 +53,11 @@ export function IncomeAuditPage() {
         <Grid.Col span={{ base: 12, xl: 4 }}>
           <Stack gap="md">
             <PremiumCard p="md">
-              <Text fw={700}>Validation rules</Text>
+              <Text fw={700}>Validation Rules</Text>
               <Text size="sm" c="dimmed">Revenue buckets, cashier reconciliation, and room audit checks.</Text>
             </PremiumCard>
             <PremiumCard p="md">
-              <Text fw={700}>Realtime status</Text>
+              <Text fw={700}>Realtime Status</Text>
               <Text size="sm" c="dimmed">{snapshot?.connectionStatus}</Text>
             </PremiumCard>
           </Stack>

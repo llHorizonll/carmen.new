@@ -90,7 +90,7 @@ export function Topbar() {
         <ActionIcon variant="subtle" size="lg" onClick={toggleColorScheme} aria-label="Toggle color scheme">
           {colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoon size={16} />}
         </ActionIcon>
-        <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last sync ${formatDateTime(lastSyncAt)}` : 'Live'} />
+        <LiveIndicator status={connectionStatus} label={lastSyncAt ? `Last Sync ${formatDateTime(lastSyncAt)}` : 'Live'} />
         <Menu shadow="lg" position="bottom-end" withinPortal>
           <Menu.Target>
             <Button variant="subtle" size="compact-sm" className="topbar-user-button" leftSection={<Avatar radius="xl" size="sm">{session?.user.name?.slice(0, 1) ?? 'C'}</Avatar>}>
@@ -101,11 +101,11 @@ export function Topbar() {
             <Menu.Label>{session?.user.role}</Menu.Label>
             <Menu.Item onClick={() => navigate('/app/settings')}>Settings</Menu.Item>
             <Menu.Item onClick={() => toggleColorScheme()}>
-              {colorScheme === 'dark' ? 'Light mode' : 'Dark mode'}
+              {colorScheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item color="red" onClick={logout} leftSection={<IconLogout size={14} />}>
-              Sign out
+              Sign Out
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
